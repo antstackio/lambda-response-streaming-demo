@@ -1,0 +1,21 @@
+# Ignore build artifacts
+build/
+dist/
+
+# Ignore SAM generated artifacts
+.sam/
+
+# Ignore dependencies
+node_modules/
+npm-debug.log
+
+# Ignore .DS_Store files (Mac specific)
+.DS_Store
+
+# Ignore AWS credentials
+.aws-sam/
+.sam.local/
+aws-sam-cli.yaml
+
+# Ignore local environment variables
+.env

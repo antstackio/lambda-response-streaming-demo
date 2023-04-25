@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import ResponseStreamTable from "../../features/ResponseStreamAPITable";
 import RegularTable from "../../features/RegularAPITable";
 import "./Dashboard.css";
-
+//trigger
 const Dashboard = () => (
   <Row>
     <Col span={12} className="columnStyle columnLeft">
