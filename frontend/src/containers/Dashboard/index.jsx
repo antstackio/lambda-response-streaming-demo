@@ -4,7 +4,7 @@ import RegularTable from "../../features/RegularAPITable";
 import logo from "../../assets/antstack_type_logo.svg";
 
 import "./Dashboard.css";
-//trigger
+
 const Dashboard = () => (
   <>
   <div className="logo">
