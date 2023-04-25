@@ -15,7 +15,7 @@ const RegularTable = () => {
     tableData: data,
     scroll: {
       // to be used in conjunction with "width" property in table headers data
-      y: "40vh",
+      y: "30vh",
     },
   };
 
