@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  RegularFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/RegularLambda
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Timeout: 30
+      MemorySize: 512
+      AutoPublishAlias: live
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /regular
+            Method: get
+            RestApiId:
+              Ref: ResponseStreamingFunctionApi
+    Connectors:
+      ScanTableConnector:
+        Properties:
+          Destination:
+            Id: ScanTable2
+          Permissions:
+            - Write
+            - Read
+      QueryTableConnector:
+        Properties:
+          Destination:
+            Id: QueryTable2
+          Permissions:
+            - Write
+            - Read
+  ResponseStreamingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/ResponseStreamingLambda
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Timeout: 30
+      MemorySize: 512
+      AutoPublishAlias: live
+      FunctionUrlConfig:
+        AuthType: AWS_IAM
+        InvokeMode: RESPONSE_STREAM
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /response_streaming
+            Method: get
+            RestApiId:
+              Ref: ResponseStreamingFunctionApi
+    Connectors:
+      ScanTableConnector:
+        Properties:
+          Destination:
+            Id: ScanTable2
+          Permissions:
+            - Write
+            - Read
+      QueryTableConnector:
+        Properties:
+          Destination:
+            Id: QueryTable2
+          Permissions:
+            - Write
+            - Read
+
+  ResponseStreamingFunctionUrl2:
+    Type: AWS::Lambda::Url
+    Properties:
+      TargetFunctionArn: !Ref ResponseStreamingFunction
+      AuthType: AWS_IAM
+      InvokeMode: RESPONSE_STREAM
+
+  ResponseStreamingFunctionApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+
+  ScanTable2:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "sandy-scan-table2"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+
+  QueryTable2:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "sandy-query-table2"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "category"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "category"
+          KeyType: "HASH"
+        - AttributeName: "id"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
