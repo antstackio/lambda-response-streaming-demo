@@ -26,7 +26,7 @@ const RegularTable = () => {
   const { Title } = Typography;
   return (
     <>
-      <Title level={2}>{"Regular API"}</Title>
+      <Title level={4}>{"Regular API"}</Title>
       <div style={{ height: "120px" }}>
         <Image height={"100%"} src={regularApiImage} />
       </div>

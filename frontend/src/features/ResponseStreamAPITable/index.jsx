@@ -25,7 +25,7 @@ const ResponseStreamTable = () => {
   const { Title } = Typography;
   return (
     <>
-      <Title level={2}>{"Response Streaming API"}</Title>
+      <Title level={4}>{"Response Streaming API"}</Title>
 
       <div style={{ height: "120px" }}>
         <Image height={"100%"} src={responseStreamingImage} />

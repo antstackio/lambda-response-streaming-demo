@@ -32,7 +32,7 @@
 }
 
 #root > .ant-row > .ant-col.columnLeft {
-  border: solid 3px green;
+  /* border: solid 3px green; */
   border-radius: 30px;
   min-width: 50%;
   width: 50%;
@@ -48,19 +48,13 @@
 .ant-image {
   width: 100%;
 }
-#root > .ant-row > .ant-col h2 {
-  padding: 16px;
-  /* width: 100%; */
+#root > .ant-row > .ant-col h4 {
+  padding: 0 16px;
   margin: 0;
   margin: -16px -16px 0;
 }
-#root > .ant-row > .ant-col.columnLeft h2 {
-  /* background: #ca6c2e; */
-  /* color: #fff; */
-  border-radius: 8px;
-  background: #e9ffe9;
-}
-#root > .ant-row h2 + div {
+
+#root > .ant-row h4 + div {
   background: #fff;
   border-radius: 8px;
   overflow: hidden;

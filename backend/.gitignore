@@ -4,6 +4,7 @@ dist/
 
 # Ignore SAM generated artifacts
 .sam/
+.samconfig.toml
 
 # Ignore dependencies
 node_modules/
