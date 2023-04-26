@@ -1,0 +1,12 @@
+.header {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  margin: 24px 0 16px 0;
+  color: #fff;
+  background-color: #fff;
+  justify-content: left;
+  align-content: space-around;
+  flex-wrap: wrap;
+  padding-left: 24px;
+}
