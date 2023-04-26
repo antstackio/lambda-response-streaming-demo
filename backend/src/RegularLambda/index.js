@@ -21,14 +21,12 @@ exports.handler = async (event) => {
       return AWS.DynamoDB.Converter.unmarshall(item);
     });
 
-    // 2. const requestStream = Readable.from(Buffer.from(JSON.stringify(data.Items)));
-
     // Add the scanned items to the items array
     items = items.concat(data.Items);
     counter += 1;
 
     // If there are more items to scan, recursively call the scanDynamoDBTable function with the last evaluated key
-    if (data.LastEvaluatedKey && counter <= 2) {
+    if (data.LastEvaluatedKey && counter < 2) {
       return scanDynamoDBTable(tableName, data.LastEvaluatedKey, items);
     }
 
