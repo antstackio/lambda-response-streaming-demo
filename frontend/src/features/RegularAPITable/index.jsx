@@ -10,6 +10,7 @@ const RegularTable = () => {
   const [ttfb, setTtfb] = useState("0");
   const [apiTime, setApiTime] = useState("0");
   const [ddbItems, setDdbItems] = useState("0");
+  const [ddbItemsSize, setDdbItemsSize] = useState("0");
 
   const regularTableRender = {
     tableData: data,
@@ -20,7 +21,13 @@ const RegularTable = () => {
   };
 
   useEffect(() => {
-    apiCallRegularResponse(setData, setTtfb, setApiTime, setDdbItems);
+    apiCallRegularResponse(
+      setData,
+      setTtfb,
+      setApiTime,
+      setDdbItems,
+      setDdbItemsSize
+    );
   }, []);
 
   const { Title } = Typography;
@@ -31,10 +38,11 @@ const RegularTable = () => {
         <Image height={"100%"} src={regularApiImage} />
       </div>
       <Row>
-        <Space size="large">
-          <Statistic title="Time To First Byte (TTFB)" value={ttfb} />
+        <Space size="medium">
+          <Statistic title="Time To First Byte" value={ttfb} />
           <Statistic title="API Time" value={apiTime} />
-          <Statistic title="DynamoDB Items Processed" value={ddbItems} />
+          <Statistic title="# DynamoDB Records" value={ddbItems} />
+          {/* <Statistic title="Data Size" value={ddbItems} /> */}
         </Space>
       </Row>
       <GenericTable {...regularTableRender} />

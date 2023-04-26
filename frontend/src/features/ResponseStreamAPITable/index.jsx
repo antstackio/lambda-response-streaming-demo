@@ -9,6 +9,7 @@ const ResponseStreamTable = () => {
   const [ttfb, setTtfb] = useState("0");
   const [apiTime, setApiTime] = useState("0");
   const [ddbItems, setDdbItems] = useState("0");
+  const [ddbItemsSize, setDdbItemsSize] = useState("0");
 
   const responseStreamingTableRender = {
     tableData: data,
@@ -19,7 +20,13 @@ const ResponseStreamTable = () => {
   };
 
   useEffect(() => {
-    apiCallStreamingResponse(setData, setTtfb, setApiTime, setDdbItems);
+    apiCallStreamingResponse(
+      setData,
+      setTtfb,
+      setApiTime,
+      setDdbItems,
+      setDdbItemsSize
+    );
   }, []);
 
   const { Title } = Typography;
@@ -31,10 +38,11 @@ const ResponseStreamTable = () => {
         <Image height={"100%"} src={responseStreamingImage} />
       </div>
       <Row>
-        <Space size="large">
-          <Statistic title="Time To First Byte (TTFB)" value={ttfb} />
+        <Space size="small">
+          <Statistic title="Time To First Byte" value={ttfb} />
           <Statistic title="API Time" value={apiTime} />
-          <Statistic title="DynamoDB Items Processed" value={ddbItems} />
+          <Statistic title="# DynamoDB Records" value={ddbItems} />
+          {/* <Statistic title="Data Size" value={ddbItemsSize} /> */}
         </Space>
       </Row>
       <GenericTable {...responseStreamingTableRender} />

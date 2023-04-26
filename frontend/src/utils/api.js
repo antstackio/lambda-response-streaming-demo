@@ -2,7 +2,8 @@ const apiCallStreamingResponse = (
   setData,
   setTtfb,
   setApiTime,
-  setDdbItems
+  setDdbItems,
+  setDdbItemsSize
 ) => {
   let output = [];
   let tempChunk = "";
@@ -42,6 +43,9 @@ const apiCallStreamingResponse = (
                   tempChunk = ""; // clear temp value to start next iteration
                   setData(output); // update data to refresh table
                   setDdbItems(output.length); //statistics
+                  setDdbItemsSize(
+                    Math.round(JSON.stringify(output).length / 1024)
+                  ); //statistics
                 };
 
                 // identify separator and take action accordingly
@@ -102,7 +106,13 @@ const apiCallStreamingResponse = (
     .catch((error) => console.log("api failed", error));
 };
 
-const apiCallRegularResponse = (setData, setTtfb, setApiTime, setDdbItems) => {
+const apiCallRegularResponse = (
+  setData,
+  setTtfb,
+  setApiTime,
+  setDdbItems,
+  setDdbItemsSize
+) => {
   const apiStartTime = Date.now();
 
   fetch("https://xvbk8vsrbi.execute-api.ap-south-1.amazonaws.com/prod/regular")
@@ -114,6 +124,7 @@ const apiCallRegularResponse = (setData, setTtfb, setApiTime, setDdbItems) => {
       setTtfb((Date.now() - apiStartTime).toString() + " ms");
       setApiTime((Date.now() - apiStartTime).toString() + " ms");
       setDdbItems(data.length);
+      setDdbItemsSize(Math.round(JSON.stringify(data).length / 1024));
     })
     .catch((error) => console.log("api failed", error));
 };
