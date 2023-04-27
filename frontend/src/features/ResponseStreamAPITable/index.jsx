@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { apiCallStreamingResponse } from "../../utils/api";
 import GenericTable from "../../components/table";
-import { Statistic, Row, Space, Typography, Image } from "antd";
+import { Row, Space, Typography, Image } from "antd";
 import responseStreamingImage from "../../assets/responseStreamingApi.svg";
+import GenericStatistic from "../../components/statistics";
 
 const ResponseStreamTable = () => {
   const [data, setData] = useState([]);
@@ -39,9 +40,9 @@ const ResponseStreamTable = () => {
       </div>
       <Row>
         <Space size="small">
-          <Statistic title="Time To First Byte" value={ttfb} />
-          <Statistic title="API Time" value={apiTime} />
-          <Statistic title="# DynamoDB Records" value={ddbItems} />
+          <GenericStatistic {...{ title: "ttfb", value: ttfb }} />
+          <GenericStatistic {...{ title: "apiTime", value: apiTime }} />
+          <GenericStatistic {...{ title: "ddbItems", value: ddbItems }} />
           {/* <Statistic title="Data Size" value={ddbItemsSize} /> */}
         </Space>
       </Row>

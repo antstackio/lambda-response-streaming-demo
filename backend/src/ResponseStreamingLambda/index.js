@@ -24,7 +24,7 @@ exports.handler = awslambda.streamifyResponse(
       const params = {
         TableName: tableName,
         ExclusiveStartKey: startKey,
-        Limit: 100,
+        Limit: 250,
       };
 
       // Use the DynamoDB object to scan the table with the specified parameters
@@ -45,10 +45,11 @@ exports.handler = awslambda.streamifyResponse(
       counter += 1;
 
       // If there are more items to scan, recursively call the scanDynamoDBTable function with the last evaluated key
-      if (data.LastEvaluatedKey && counter < 5) {
+      if (data.LastEvaluatedKey && counter < 10) {
         return scanDynamoDBTable(tableName, data.LastEvaluatedKey, items);
       }
 
+      // End stream
       responseStream.end();
     }
   }

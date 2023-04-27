@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { apiCallRegularResponse } from "../../utils/api";
 import GenericTable from "../../components/table";
 import { Statistic, Row, Space, Typography, Image } from "antd";
+import { FieldTimeOutlined } from "@ant-design/icons";
+import GenericStatistic from "../../components/statistics";
 
 import regularApiImage from "../../assets/regularApi.svg";
 
@@ -39,9 +41,9 @@ const RegularTable = () => {
       </div>
       <Row>
         <Space size="medium">
-          <Statistic title="Time To First Byte" value={ttfb} />
-          <Statistic title="API Time" value={apiTime} />
-          <Statistic title="# DynamoDB Records" value={ddbItems} />
+          <GenericStatistic {...{ title: "ttfb", value: ttfb }} />
+          <GenericStatistic {...{ title: "apiTime", value: apiTime }} />
+          <GenericStatistic {...{ title: "ddbItems", value: ddbItems }} />
           {/* <Statistic title="Data Size" value={ddbItems} /> */}
         </Space>
       </Row>
