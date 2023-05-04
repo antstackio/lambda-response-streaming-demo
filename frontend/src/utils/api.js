@@ -1,23 +1,14 @@
-const apiCallStreamingResponse = (
-  setData,
-  setTtfb,
-  setApiTime,
-  setDdbItems,
-  setDdbItemsSize
-) => {
+const apiCallStreamingResponse = (setData, setTtfb, setApiTime, setDdbItems, setDdbItemsSize, query = false) => {
   let output = [];
-  let tempChunk = "";
-  const separator = "${Separator}";
+  let tempChunk = '';
+  const separator = '${Separator}';
   const apiStartTime = Date.now();
 
-  fetch(
-    "https://igvxeczeq7jnmbc6vdve4mw6vq0cupbf.lambda-url.ap-south-1.on.aws/",
-    {
-      method: "GET",
-      redirect: "follow",
-      responseType: "stream",
-    }
-  )
+  fetch(`https://igvxeczeq7jnmbc6vdve4mw6vq0cupbf.lambda-url.ap-south-1.on.aws/${query ? '?query=true' : ''}`, {
+    method: 'GET',
+    redirect: 'follow',
+    responseType: 'stream',
+  })
     .then((response) => {
       // Stream reader
       const reader = response.body.getReader();
@@ -34,18 +25,16 @@ const apiCallStreamingResponse = (
                 // helper function to set the data
                 const setTableData = () => {
                   if (output.length === 0) {
-                    setTtfb((Date.now() - apiStartTime).toString() + " ms");
+                    setTtfb((Date.now() - apiStartTime).toString() + ' ms');
                   } //statistics
 
                   let result = JSON.parse(tempChunk); // assign
                   result.map((e) => (e.key = e.id)); // add key to avoid ant design's unique key error
                   output = output.concat(result); // add to previously loaded dataset
-                  tempChunk = ""; // clear temp value to start next iteration
+                  tempChunk = ''; // clear temp value to start next iteration
                   setData(output); // update data to refresh table
                   setDdbItems(output.length); //statistics
-                  setDdbItemsSize(
-                    Math.round(JSON.stringify(output).length / 1024)
-                  ); //statistics
+                  setDdbItemsSize(Math.round(JSON.stringify(output).length / 1024)); //statistics
                 };
 
                 // identify separator and take action accordingly
@@ -53,29 +42,23 @@ const apiCallStreamingResponse = (
                   //dataset 1 - ${separator}<stringData>${separator}
                   if (chunk.indexOf(separator) === 0) {
                     setTableData();
-                    chunk = chunk.replace(separator, ""); // after this it becomes dataset 2
+                    chunk = chunk.replace(separator, ''); // after this it becomes dataset 2
                   }
                   // dataset 2 - <stringData${separator}<stringData>${separator}
-                  if (
-                    chunk.endsWith(separator) &&
-                    chunk.split(separator).length === 3
-                  ) {
+                  if (chunk.endsWith(separator) && chunk.split(separator).length === 3) {
                     tempChunk += chunk.substring(0, chunk.indexOf(separator));
                     setTableData();
                   }
                   // dataset 3 - <stringData>${separator}
-                  if (
-                    chunk.endsWith(separator) &&
-                    chunk.split(separator).length === 2
-                  ) {
-                    chunk = chunk.split(separator).filter((e) => e !== "");
+                  if (chunk.endsWith(separator) && chunk.split(separator).length === 2) {
+                    chunk = chunk.split(separator).filter((e) => e !== '');
                     tempChunk += chunk[0];
                     setTableData();
-                    chunk = ""; // to avoid execution for dataset 4
+                    chunk = ''; // to avoid execution for dataset 4
                   }
                   // dataset 4 - <stringData${separator}<stringData>
-                  if (chunk !== "") {
-                    chunk = chunk.split(separator).filter((e) => e !== "");
+                  if (chunk !== '') {
+                    chunk = chunk.split(separator).filter((e) => e !== '');
                     tempChunk += chunk[0];
                     setTableData();
                     if (chunk.length > 1) tempChunk = chunk[1];
@@ -88,14 +71,14 @@ const apiCallStreamingResponse = (
                 if (done) {
                   controller.close();
                   //statistics
-                  setApiTime((Date.now() - apiStartTime).toString() + " ms");
+                  setApiTime((Date.now() - apiStartTime).toString() + ' ms');
                   return;
                 }
                 // iterate
                 push();
               })
               .catch((error) => {
-                console.error("Error reading response:", error);
+                console.error('Error reading response:', error);
                 controller.error(error);
               });
           }
@@ -103,7 +86,7 @@ const apiCallStreamingResponse = (
         },
       });
     })
-    .catch((error) => console.log("api failed", error));
+    .catch((error) => console.log('api failed', error));
 };
 
 const apiCallRegularResponse = (
@@ -111,22 +94,25 @@ const apiCallRegularResponse = (
   setTtfb,
   setApiTime,
   setDdbItems,
-  setDdbItemsSize
+  setDdbItemsSize,
+  setColdStart,
+  query = false
 ) => {
   const apiStartTime = Date.now();
 
-  fetch("https://xvbk8vsrbi.execute-api.ap-south-1.amazonaws.com/prod/regular")
+  fetch(`https://xvbk8vsrbi.execute-api.ap-south-1.amazonaws.com/prod/regular${query ? '?query=true' : ''}`)
     .then((response) => {
       return response.json();
     })
     .then((data) => {
-      setData(data);
-      setTtfb((Date.now() - apiStartTime).toString() + " ms");
-      setApiTime((Date.now() - apiStartTime).toString() + " ms");
-      setDdbItems(data.length);
-      setDdbItemsSize(Math.round(JSON.stringify(data).length / 1024));
+      setData(data.items);
+      setTtfb((Date.now() - apiStartTime).toString() + ' ms');
+      setApiTime((Date.now() - apiStartTime).toString() + ' ms');
+      setDdbItems(data.items.length);
+      setDdbItemsSize(Math.round(JSON.stringify(data.items).length / 1024));
+      setColdStart(data.coldStart);
     })
-    .catch((error) => console.log("api failed", error));
+    .catch((error) => console.log('api failed', error));
 };
 
 export { apiCallStreamingResponse, apiCallRegularResponse };
