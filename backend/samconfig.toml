@@ -1,8 +1,8 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "lambda-streaming-test-sandy"
+stack_name = "lambda-streaming-test-varun"
 resolve_s3 = true
-s3_prefix = "lambda-streaming-test-sandy"
+s3_prefix = "lambda-streaming-test-varun"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
