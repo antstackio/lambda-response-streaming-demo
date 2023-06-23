@@ -24,19 +24,20 @@ jobs:
 
       # AWS Config
       - uses: actions/setup-python@v2
-      - uses: aws-actions/setup-sam@v1
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{steps.Region.outputs.value}}
 
       # SAM Build
-      - run: cd backend
-      - run: sam build --use-container
+      - run: sam build --use-container --template-file template.yaml
+        working-directory: ./backend
 
       # SAM Deploy
-      - run: sam deploy --config-file ./backend/samconfig.toml
+      - run: sam deploy --config-file samconfig.toml
+        working-directory: ./backend
 
       # Describe CF and get output
       # - run: npm install -C scripts/
