@@ -40,7 +40,9 @@ jobs:
         run: sam deploy --config-file samconfig.toml
         working-directory: ./backend
       
-      - run: ${{steps.sam-deploy.outputs}}
+      - run: echo ${{steps.sam-deploy.outputs}}
+      - run: echo ${{steps.sam-deploy.outcome}}
+      - run: echo ${{steps.sam-deploy.conclusion}}
       # Describe CF and get output
       # - run: npm install -C scripts/
       # - run: node scripts/updateInfo.js ${{ github.workspace }} ${{steps.Region.outputs.value}}

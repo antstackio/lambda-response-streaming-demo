@@ -109,5 +109,5 @@ Resources:
           KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
 Outputs:
-  ResponseLambda:
+  ResponseLambdaUrl:
     Value: !GetAtt ResponseStreamingFunctionUrl2.FunctionUrl
