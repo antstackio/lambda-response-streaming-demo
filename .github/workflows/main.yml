@@ -1,0 +1,48 @@
+on:
+  push:
+    branches:
+      - feat/deployment
+jobs:
+  Build_Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Init
+      - uses: actions/checkout@v2
+
+      # Use node 16
+      - name: Setup Node.js v16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      # Variable declaration
+      - id: Region
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "region"
+
+      # AWS Config
+      - uses: actions/setup-python@v2
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{steps.Region.outputs.value}}
+
+      # SAM Build
+      - run: sam build --use-container
+
+      # SAM Deploy
+      - run: cd backend
+      - run: sam deploy --config-file samconfig.toml
+
+      # Describe CF and get output
+      # - run: npm install -C scripts/
+      # - run: node scripts/updateInfo.js ${{ github.workspace }} ${{steps.Region.outputs.value}}
+
+      # # Build and Sync S#
+      # - run: yarn --cwd ${{ github.workspace }}/s3-website install
+      # - run: yarn --cwd ${{ github.workspace }}/s3-website build
+      # - run: aws s3 sync ${{ github.workspace }}/s3-website/build s3://${{steps.S3BucketName.outputs.prop}}
