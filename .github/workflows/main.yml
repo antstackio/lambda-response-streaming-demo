@@ -39,6 +39,15 @@ jobs:
       - run: sam deploy --config-file samconfig.toml
         working-directory: ./backend
 
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
       # Build Frontend
       - run: npm run build
         working-directory: ./frontend
