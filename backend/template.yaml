@@ -84,7 +84,7 @@ Resources:
   ScanTable2:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "sandy-scan-table2"
+      TableName: "varun-scan-table"
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
@@ -96,7 +96,7 @@ Resources:
   QueryTable2:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "sandy-query-table2"
+      TableName: "varun-query-table"
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
