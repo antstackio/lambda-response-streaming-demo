@@ -52,11 +52,7 @@ jobs:
         working-directory: ./frontend
 
       # Upload To S3
-      - uses: shallwefootball/s3-upload-action@master
-        name: Upload S3
-        id: S3
+      - uses: actions/upload-artifact@v2
         with:
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          aws_bucket: lambda-res-stream-varun
-          source_dir: './frontend/dist'
+          name: lambda-res-stream-varun
+          path: ./frontend/dist
