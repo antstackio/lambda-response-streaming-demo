@@ -20,7 +20,7 @@ jobs:
         uses: SebRollen/toml-action@v1.0.2
         with:
           file: "${{ github.workspace }}/backend/samconfig.toml"
-          field: "region"
+          field: "default.deploy.parameters.region"
 
       # AWS Config
       - uses: actions/setup-python@v2
