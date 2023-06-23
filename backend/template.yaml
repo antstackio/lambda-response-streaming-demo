@@ -108,3 +108,6 @@ Resources:
         - AttributeName: "id"
           KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
+Outputs:
+  ResponseLambdaUrl:
+    Value: !GetAtt ResponseStreamingFunctionUrl2.FunctionUrl
