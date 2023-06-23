@@ -32,11 +32,11 @@ jobs:
           aws-region: ${{steps.Region.outputs.value}}
 
       # SAM Build
-      - run: sam build --use-container
+      - run: sam build --use-container --config-file ./backend/samconfig.toml --template-file ./backend/template.yaml
 
       # SAM Deploy
       - run: cd backend
-      - run: sam deploy --config-file samconfig.toml
+      - run: sam deploy --config-file ./backend/samconfig.toml
 
       # Describe CF and get output
       # - run: npm install -C scripts/
