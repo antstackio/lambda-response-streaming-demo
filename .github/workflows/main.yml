@@ -36,7 +36,7 @@ jobs:
         working-directory: ./backend
 
       # SAM Deploy
-      - run: sam deploy --config-file samconfig.toml
+      - run: sam deploy --no-fail-on-empty-changeset --config-file samconfig.toml
         working-directory: ./backend
 
       - name: Set up Node
