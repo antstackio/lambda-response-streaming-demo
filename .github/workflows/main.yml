@@ -32,10 +32,10 @@ jobs:
           aws-region: ${{steps.Region.outputs.value}}
 
       # SAM Build
-      - run: sam build --use-container --config-file ./backend/samconfig.toml --template-file ./backend/template.yaml
+      - run: cd backend
+      - run: sam build --use-container
 
       # SAM Deploy
-      - run: cd backend
       - run: sam deploy --config-file ./backend/samconfig.toml
 
       # Describe CF and get output
