@@ -6,3 +6,4 @@ s3_prefix = "lambda-streaming-test-varun"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
+s3_bucket_name = "lambda-res-stream-varun"

@@ -22,6 +22,12 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.region"
 
+      - id: S3_BUCKET_NAME
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.s3_bucket_name"
+
       # AWS Config
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v2
@@ -54,7 +60,7 @@ jobs:
       # Upload To S3
       - uses: jakejarvis/s3-sync-action@master
         env:
-          AWS_S3_BUCKET: lambda-res-stream-varun
+          AWS_S3_BUCKET: ${{steps.S3_BUCKET_NAME.outputs.value}}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{steps.Region.outputs.value}}
