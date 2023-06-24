@@ -178,3 +178,5 @@ Resources:
 Outputs:
   ResponseLambdaUrl:
     Value: !GetAtt ResponseStreamingFunctionUrl2.FunctionUrl
+  CloudFrontDomainName:
+    Value: !GetAtt CloudFrontDistribution.DomainName
