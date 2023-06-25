@@ -112,7 +112,11 @@ const apiCallRegularResponse = (
 ) => {
   const apiStartTime = Date.now();
 
-  fetch(`https://xvbk8vsrbi.execute-api.ap-south-1.amazonaws.com/prod/regular`)
+  fetch(
+    `https://${
+      import.meta.env.VITE_LAMBDA_URL
+    }.execute-api.ap-south-1.amazonaws.com/prod/regular`
+  )
     .then((response) => {
       return response.json();
     })
