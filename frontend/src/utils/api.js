@@ -117,10 +117,14 @@ const apiCallRegularResponse = (
   console.log("BEFORE::: ", apiId);
   apiId = apiId.replace("/\\/g", "");
   console.log("AFTER::: ", apiId);
-  // let apiUrl = `https://"".execute-api.ap-south-1.amazonaws.com/prod/regular`;
+  let apiUrl = [
+    "https://",
+    apiId,
+    ".execute-api.ap-south-1.amazonaws.com/prod/regular",
+  ].join("");
   // console.log("BEFORE: ", apiUrl);
   // apiUrl = apiUrl.split("%22").join("");
-  // console.log("AFTER: ", apiUrl);
+  console.log("AFTER: ", apiUrl);
   fetch(apiUrl)
     .then((response) => {
       return response.json();
