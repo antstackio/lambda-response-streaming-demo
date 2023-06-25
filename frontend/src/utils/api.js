@@ -115,7 +115,7 @@ const apiCallRegularResponse = (
   const apiStartTime = Date.now();
   let apiUrl = import.meta.env.VITE_API_URL;
   console.log("BEFORE: ", apiUrl);
-  apiUrl = apiUrl.replace(/%22/g, "");
+  apiUrl = apiUrl.split("%22").join("");
   console.log("AFTER: ", apiUrl);
   fetch(apiUrl)
     .then((response) => {
