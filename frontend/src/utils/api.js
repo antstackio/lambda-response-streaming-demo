@@ -114,9 +114,9 @@ const apiCallRegularResponse = (
 ) => {
   const apiStartTime = Date.now();
   let apiId = import.meta.env.VITE_API_ID;
-  console.log("BEFORE: ", apiId);
+  console.log("BEFORE::: ", apiId);
   apiId = apiId.replace("/\\/g", "");
-  console.log("AFTER: ", apiId);
+  console.log("AFTER::: ", apiId);
   // let apiUrl = `https://"".execute-api.ap-south-1.amazonaws.com/prod/regular`;
   // console.log("BEFORE: ", apiUrl);
   // apiUrl = apiUrl.split("%22").join("");
