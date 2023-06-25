@@ -11,6 +11,7 @@ const apiCallStreamingResponse = (
   const apiStartTime = Date.now();
 
   const lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
+  console.log({ lambdaUrl });
 
   fetch(lambdaUrl, {
     method: "GET",
@@ -115,6 +116,7 @@ const apiCallRegularResponse = (
   const apiStartTime = Date.now();
   const apiId = import.meta.env.VITE_API_ID;
   const apiUrl = `https://${apiId}.execute-api.ap-south-1.amazonaws.com/prod/regular`;
+  console.log({ apiId, apiUrl });
   fetch(apiUrl)
     .then((response) => {
       return response.json();
