@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '16.x'
 
-      # Variable declaration
+      # Variable declaration from samconfig.toml file
       - id: Region
         uses: SebRollen/toml-action@v1.0.2
         with:
@@ -34,7 +34,7 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.s3_bucket_name"
 
-      # AWS Config
+      # AWS Configuration
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v2
       - uses: aws-actions/configure-aws-credentials@v2
@@ -51,7 +51,7 @@ jobs:
       - run: sam deploy --no-fail-on-empty-changeset --config-file samconfig.toml
         working-directory: ./backend
 
-      # Cloudformation Output
+      # Cloudformation output taken to set dynamic linking with frontend
       - id: cf_lambda_url
         name: Setting Lambda Url for VITE
         run: echo "cf_output1=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[1].OutputValue")" >> $GITHUB_OUTPUT
@@ -61,7 +61,7 @@ jobs:
         run: echo "cf_output2=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[0].OutputValue")" >> $GITHUB_OUTPUT
 
 
-      # Installing Dependencies
+      # Installing Dependencies for Frontend
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
@@ -70,7 +70,7 @@ jobs:
         run: npm install
         working-directory: ./frontend
 
-      # Clear S3 bucket
+      # Clearing S3 bucket where frontend old build is stored
       - name: Clearing older version
         run: aws s3api delete-object --bucket ${{steps.S3_Bucket_Name.outputs.value}} --key "assets/"
         working-directory: ./frontend
@@ -82,7 +82,7 @@ jobs:
           VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
         working-directory: ./frontend
 
-      # # Upload To S3
+      # # Upload the build to S3
       - uses: jakejarvis/s3-sync-action@master
         env:
           AWS_S3_BUCKET: ${{steps.S3_Bucket_Name.outputs.value}}
