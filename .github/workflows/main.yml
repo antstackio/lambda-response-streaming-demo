@@ -34,12 +34,6 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.s3_bucket_name"
 
-      - id: Dynamo_Scan_Db_Name
-        uses: SebRollen/toml-action@v1.0.2
-        with:
-          file: "${{ github.workspace }}/backend/samconfig.toml"
-          field: "default.deploy.parameters.s3_bucket_name"
-
       # AWS Config
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v2
@@ -86,7 +80,6 @@ jobs:
         env:
           VITE_LAMBDA_URL: ${{steps.cf_lambda_url.outputs.cf_output1}}
           VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
-          VITE_SCAN_DB_NAME: ${{steps.Dynamo_Scan_Db_Name.outputs.value}}
         working-directory: ./frontend
 
       # # Upload To S3

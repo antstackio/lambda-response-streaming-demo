@@ -19,6 +19,9 @@ Resources:
       Timeout: 30
       MemorySize: 1024
       AutoPublishAlias: live
+      Environment:
+        Variables:
+          SCAN_DB_NAME: !Ref DynamoDBScanName
       Events:
         ApiEvent:
           Type: Api
@@ -54,6 +57,9 @@ Resources:
       FunctionUrlConfig:
         AuthType: AWS_IAM
         InvokeMode: RESPONSE_STREAM
+      Environment:
+        Variables:
+          SCAN_DB_NAME: !Ref DynamoDBScanName
       Events:
         ApiEvent:
           Type: Api

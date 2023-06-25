@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB();
-const tableName = import.meta.env.VITE_SCAN_DB_NAME;
+const tableName = process.env.SCAN_DB_NAME;
 
 exports.handler = awslambda.streamifyResponse(
   async (event, responseStream, context) => {
