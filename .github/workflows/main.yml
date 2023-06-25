@@ -22,6 +22,12 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.region"
 
+      - id: Stack_Name
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.stack_name"
+
       - id: S3_BUCKET_NAME
         uses: SebRollen/toml-action@v1.0.2
         with:
@@ -37,31 +43,40 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{steps.Region.outputs.value}}
 
-      # SAM Build
-      - run: sam build --use-container --template-file template.yaml
-        working-directory: ./backend
+      # # SAM Build
+      # - run: sam build --use-container --template-file template.yaml
+      #   working-directory: ./backend
 
-      # SAM Deploy
-      - run: sam deploy --no-fail-on-empty-changeset --config-file samconfig.toml
-        working-directory: ./backend
+      # # SAM Deploy
+      # - run: sam deploy --no-fail-on-empty-changeset --config-file samconfig.toml
+      #   working-directory: ./backend
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./frontend
+      # Cloudformation Output
+      - name: Setting Cloudformation output
+        run: |
+            cf_output=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks\
+            --stack-name ${{steps.Stack_Name.outputs.value}}\
+            --query "Stacks") >> $GITHUB_OUTPUT
+      - run: echo $GITHUB_OUTPUT
 
-      # Build Frontend
-      - run: npm run build
-        working-directory: ./frontend
+      # Installing Dependencies
+      # - name: Set up Node
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18
+      # - name: Install dependencies
+      #   run: npm install
+      #   working-directory: ./frontend
 
-      # Upload To S3
-      - uses: jakejarvis/s3-sync-action@master
-        env:
-          AWS_S3_BUCKET: ${{steps.S3_BUCKET_NAME.outputs.value}}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{steps.Region.outputs.value}}
-          SOURCE_DIR: ./frontend/dist
+      # # Build Frontend
+      # - run: npm run build
+      #   working-directory: ./frontend
+
+      # # Upload To S3
+      # - uses: jakejarvis/s3-sync-action@master
+      #   env:
+      #     AWS_S3_BUCKET: ${{steps.S3_BUCKET_NAME.outputs.value}}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: ${{steps.Region.outputs.value}}
+      #     SOURCE_DIR: ./frontend/dist
