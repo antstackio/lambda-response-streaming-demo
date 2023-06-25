@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB();
-const tableName = "sandy-scan-table2";
+const tableName = import.meta.env.VITE_SCAN_DB_NAME;
 
 exports.handler = async (event) => {
   let counter = 0;

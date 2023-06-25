@@ -1,5 +1,14 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: lambda-res-stream-sandy
+  DynamoDBScanName:
+    Type: String
+    Default: sandy_scan_table2
+
 Resources:
   RegularFunction:
     Type: AWS::Serverless::Function
@@ -84,7 +93,7 @@ Resources:
   ScanTable2:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "varun-scan-table"
+      TableName: !Ref DynamoDBScanName
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
@@ -120,7 +129,7 @@ Resources:
   ReadPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref S3Bucket
+      Bucket: !Ref S3BucketName
       PolicyDocument:
         Statement:
           - Action: "s3:GetObject"

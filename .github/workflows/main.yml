@@ -28,7 +28,13 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.stack_name"
 
-      - id: S3_BUCKET_NAME
+      - id: S3_Bucket_Name
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.s3_bucket_name"
+
+      - id: Dynamo_Scan_Db_Name
         uses: SebRollen/toml-action@v1.0.2
         with:
           file: "${{ github.workspace }}/backend/samconfig.toml"
@@ -72,7 +78,7 @@ jobs:
 
       # Clear S3 bucket
       - name: Clearing older version
-        run: aws s3api delete-object --bucket ${{steps.S3_BUCKET_NAME.outputs.value}} --key "assets/"
+        run: aws s3api delete-object --bucket ${{steps.S3_Bucket_Name.outputs.value}} --key "assets/"
         working-directory: ./frontend
 
       # Build Frontend
@@ -80,12 +86,13 @@ jobs:
         env:
           VITE_LAMBDA_URL: ${{steps.cf_lambda_url.outputs.cf_output1}}
           VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
+          VITE_SCAN_DB_NAME: ${{steps.Dynamo_Scan_Db_Name.outputs.value}}
         working-directory: ./frontend
 
       # # Upload To S3
       - uses: jakejarvis/s3-sync-action@master
         env:
-          AWS_S3_BUCKET: ${{steps.S3_BUCKET_NAME.outputs.value}}
+          AWS_S3_BUCKET: ${{steps.S3_Bucket_Name.outputs.value}}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{steps.Region.outputs.value}}
