@@ -179,6 +179,6 @@ Outputs:
   ResponseLambdaUrl:
     Value: !GetAtt ResponseStreamingFunctionUrl2.FunctionUrl
   ApiResourceId:
-    Value: !GetAtt ResponseStreamingFunctionApi.RootResourceId
+    Value: !GetAtt ResponseStreamingFunctionApi.RestApiId
   CloudFrontDomainName:
     Value: !GetAtt CloudFrontDistribution.DomainName
