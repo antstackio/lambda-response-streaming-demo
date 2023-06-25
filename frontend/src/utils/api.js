@@ -119,7 +119,7 @@ const apiCallRegularResponse = (
     apiId,
     ".execute-api.ap-south-1.amazonaws.com/prod/regular",
   ];
-  apiUrl = apiUrl.join('');
+  apiUrl = apiUrl.join("").replace(/"([^"]+(?="))"/g, "$1");
   // console.log("BEFORE: ", apiUrl);
   // apiUrl = apiUrl.split("%22").join("");
   console.log("AFTER: ", apiUrl);
