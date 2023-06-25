@@ -11,7 +11,7 @@ const apiCallStreamingResponse = (
   const apiStartTime = Date.now();
 
   let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
-  lambdaUrl.replace(/\\/g, "");
+  lambdaUrl = lambdaUrl.replace(/\\/g, "");
   console.log({ lambdaUrl });
 
   fetch(lambdaUrl, {
@@ -116,7 +116,7 @@ const apiCallRegularResponse = (
 ) => {
   const apiStartTime = Date.now();
   let apiId = import.meta.env.VITE_API_ID;
-  apiId.replace(/\\/g, "");
+  apiId = apiId.replace(/\\/g, "");
   const apiUrl = `https://${apiId}.execute-api.ap-south-1.amazonaws.com/prod/regular`;
   console.log({ apiId, apiUrl });
   fetch(apiUrl)
