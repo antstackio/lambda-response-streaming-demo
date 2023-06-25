@@ -74,7 +74,7 @@ jobs:
       - run: npm run build
         env:
           VITE_LAMBDA_URL: ${{steps.cf_lambda_url.outputs.cf_output1}}
-          VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
+          VITE_API_URL: https://${{steps.cf_api_id.outputs.cf_output2}}.execute-api.ap-south-1.amazonaws.com/prod/regular
         working-directory: ./frontend
 
       # # Upload To S3
