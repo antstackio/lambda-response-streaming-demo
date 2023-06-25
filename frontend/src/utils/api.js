@@ -10,14 +10,11 @@ const apiCallStreamingResponse = (
   const separator = "${Separator}";
   const apiStartTime = Date.now();
 
-  fetch(
-    `https://igvxeczeq7jnmbc6vdve4mw6vq0cupbf.lambda-url.ap-south-1.on.aws/`,
-    {
-      method: "GET",
-      redirect: "follow",
-      responseType: "stream",
-    }
-  )
+  fetch(`${import.meta.env.VITE_LAMBDA_URL}`, {
+    method: "GET",
+    redirect: "follow",
+    responseType: "stream",
+  })
     .then((response) => {
       // Stream reader
       const reader = response.body.getReader();
