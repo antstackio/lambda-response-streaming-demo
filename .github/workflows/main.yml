@@ -52,10 +52,11 @@ jobs:
       #   working-directory: ./backend
 
       # Cloudformation Output
-      - name: Setting Cloudformation output
-        run: cf_output=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[0].OutputValue" --output text) >> $GITHUB_OUTPUT
+      - id: step_cf
+        name: Setting Cloudformation output
+        run: cf_output=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[0].OutputValue") >> $GITHUB_OUTPUT
       
-      - run: echo $GITHUB_OUTPUT.cf_output
+      - run: echo steps.step_cf.outputs.cf_output
 
       # Installing Dependencies
       # - name: Set up Node
