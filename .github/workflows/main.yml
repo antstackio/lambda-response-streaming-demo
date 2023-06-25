@@ -70,6 +70,11 @@ jobs:
         run: npm install
         working-directory: ./frontend
 
+      # Clear S3 bucket
+      - name: Clearing older version
+        run: aws s3api delete-object --bucket ${{steps.S3_BUCKET_NAME.outputs.value}} --key "assets/"
+        working-directory: ./frontend
+
       # Build Frontend
       - run: npm run build
         env:
