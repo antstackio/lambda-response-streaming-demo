@@ -10,8 +10,7 @@ const apiCallStreamingResponse = (
   const separator = "${Separator}";
   const apiStartTime = Date.now();
 
-  let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
-  lambdaUrl = lambdaUrl.replace(/\\/g, "");
+  let lambdaUrl = JSON.parse(import.meta.env.VITE_LAMBDA_URL);
   console.log({ lambdaUrl });
 
   fetch(lambdaUrl, {
@@ -115,8 +114,7 @@ const apiCallRegularResponse = (
   setDdbItemsSize
 ) => {
   const apiStartTime = Date.now();
-  let apiId = import.meta.env.VITE_API_ID;
-  apiId = apiId.replace(/\\/g, "");
+  let apiId = JSON.parse(import.meta.env.VITE_API_ID);
   const apiUrl = `https://${apiId}.execute-api.ap-south-1.amazonaws.com/prod/regular`;
   console.log({ apiId, apiUrl });
   fetch(apiUrl)
