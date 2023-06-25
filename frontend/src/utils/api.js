@@ -113,8 +113,12 @@ const apiCallRegularResponse = (
   setDdbItemsSize
 ) => {
   const apiStartTime = Date.now();
-  let apiUrl = import.meta.env.VITE_API_URL;
-  console.log("BEFORE: ", apiUrl);
+  let apiId = import.meta.env.VITE_API_ID;
+  console.log("BEFORE: ", apiId);
+  apiId = apiId.replace("/\\/g", "");
+  console.log("AFTER: ", apiId);
+  // let apiUrl = `https://"".execute-api.ap-south-1.amazonaws.com/prod/regular`;
+  // console.log("BEFORE: ", apiUrl);
   apiUrl = apiUrl.split("%22").join("");
   console.log("AFTER: ", apiUrl);
   fetch(apiUrl)
