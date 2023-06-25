@@ -55,7 +55,7 @@ jobs:
       - id: cf_lambda_url
         name: Setting Lambda Url for VITE
         run: echo "cf_output1=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[1].OutputValue")" >> $GITHUB_OUTPUT
-      - run: echo "OK OK!!"
+
       - id: cf_api_id
         name: Setting API Id for VITE
         run: echo "cf_output2=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[0].OutputValue")" >> $GITHUB_OUTPUT
