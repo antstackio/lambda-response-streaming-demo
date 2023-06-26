@@ -2,7 +2,6 @@ version = 0.1
 [default.deploy.parameters]
 stack_name = "ls-test-varun"
 s3_bucket_for_artifacts = "ls-test-s3-arti-varun"
-resolve_s3 = true
 s3_prefix = "ls-test-varun"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
