@@ -60,8 +60,7 @@ jobs:
         working-directory: ./backend
 
       # SAM Build
-      - if: ${{always()}}
-        run: sam build --use-container --template-file template.yaml
+      - run: sam build --use-container --template-file template.yaml
         working-directory: ./backend
 
       # SAM Deploy
