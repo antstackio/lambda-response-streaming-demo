@@ -55,7 +55,7 @@ jobs:
         working-directory: ./backend
 
       - id: check_artifact_s3_2
-        run: echo "s3_check_2=$(aws s3api head-bucket --bucket ls_test_varun --region ${{steps.Region.outputs.value}})"
+        run: echo "s3_check_2=$(aws s3api head-bucket --bucket ls-test-varun --region ${{steps.Region.outputs.value}})"
         working-directory: ./backend
 
       - run: echo ${{steps.check_artifact_s3.outputs.s3_check_1}}
