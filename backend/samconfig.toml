@@ -1,10 +1,10 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "lambda-streaming-test-varun"
+stack_name = "ls-test-varun"
 resolve_s3 = true
-s3_prefix = "lambda-streaming-test-varun"
+s3_prefix = "ls-test-varun"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-parameter_overrides = "S3BucketName=\"lambda-res-stream-varun\" DynamoDBScanName=\"varun-scan-table\" DynamoDBQueryName=\"varun-query-table\""
+parameter_overrides = "S3BucketName=\"ls-test-varun\" DynamoDBScanName=\"varun-scandb-table\" DynamoDBQueryName=\"varun-querydb-table\""
 s3_bucket_name = "lambda-res-stream-varun"
