@@ -6,5 +6,5 @@ s3_prefix = "lambda-streaming-test-varun"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-parameter_overrides = "S3BucketName=\"lambda-res-stream-varun\" DynamoDBScanName=\"varun-scan-table\""
+parameter_overrides = "S3BucketName=\"lambda-res-stream-varun\" DynamoDBScanName=\"varun-scan-table\" DynamoDBQueryName=\"varun-query-table\""
 s3_bucket_name = "lambda-res-stream-varun"

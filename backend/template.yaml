@@ -8,6 +8,9 @@ Parameters:
   DynamoDBScanName:
     Type: String
     Default: sandy_scan_table2
+  DynamoDBQueryName:
+    Type: String
+    Default: sandy_query_table2
 
 Resources:
   RegularFunction:
@@ -111,7 +114,7 @@ Resources:
   QueryTable2:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "varun-query-table"
+      TableName: !Ref DynamoDBQueryName
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
@@ -127,7 +130,7 @@ Resources:
   S3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: lambda-res-stream-varun
+      BucketName: !Ref S3BucketName
       WebsiteConfiguration:
         IndexDocument: "index.html"
 
