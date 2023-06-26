@@ -55,12 +55,13 @@ jobs:
         working-directory: ./backend
 
       # Creating Artifact S3 Bucket
-      - if: ${{steps.check_artifact_s3.conclusion == 'failure'}}
+      - if: ${{failure()}}
         run: aws s3api create-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}} --create-bucket-configuration LocationConstraint=${{steps.Region.outputs.value}}
         working-directory: ./backend
 
       # SAM Build
-      - run: sam build --use-container --template-file template.yaml
+      - if: ${{success()}}
+        run: sam build --use-container --template-file template.yaml
         working-directory: ./backend
 
       # SAM Deploy
