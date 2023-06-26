@@ -22,6 +22,12 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.region"
 
+      - id: S3_Bucket_For_Artifacts
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.s3_bucket_for_artifacts"
+
       - id: Stack_Name
         uses: SebRollen/toml-action@v1.0.2
         with:
@@ -48,7 +54,7 @@ jobs:
         working-directory: ./backend
 
       # # SAM Deploy
-      - run: sam deploy --no-fail-on-empty-changeset --config-file samconfig.toml
+      - run: sam deploy --s3-bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --no-fail-on-empty-changeset --config-file samconfig.toml
         working-directory: ./backend
 
       # Cloudformation output taken to set dynamic linking with frontend
