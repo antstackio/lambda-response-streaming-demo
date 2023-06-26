@@ -49,12 +49,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{steps.Region.outputs.value}}
 
-      # Get Artifact S3 bucket
+      # Checking if there is an Artifact S3 bucket present
       - id: check_artifact_s3
         run: aws s3api head-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}}
         working-directory: ./backend
 
-      # Creating Artifact S3 Bucket
+      # Creating Artifact S3 Bucket if not present
       - if: ${{failure()}}
         run: aws s3api create-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}} --create-bucket-configuration LocationConstraint=${{steps.Region.outputs.value}}
         working-directory: ./backend
