@@ -96,6 +96,7 @@ jobs:
         env:
           VITE_LAMBDA_URL: ${{steps.cf_lambda_url.outputs.cf_output1}}
           VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
+          VITE_REGION: ${{steps.Region.outputs.value}}
         working-directory: ./frontend
 
       # # Upload the build to S3

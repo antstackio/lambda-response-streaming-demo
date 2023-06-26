@@ -112,14 +112,17 @@ const apiCallRegularResponse = (
   setDdbItems,
   setDdbItemsSize
 ) => {
-  const apiStartTime = Date.now();
   let apiId = import.meta.env.VITE_API_ID;
+  let region = import.meta.env.VITE_REGION;
   let apiUrl = [
     "https://",
     apiId,
-    ".execute-api.ap-south-1.amazonaws.com/prod/regular",
+    ".execute-api.",
+    region,
+    ".amazonaws.com/prod/regular",
   ];
   apiUrl = apiUrl.join("").replace(/"([^"]+(?="))"/g, "$1");
+  const apiStartTime = Date.now();
   fetch(apiUrl)
     .then((response) => {
       return response.json();
