@@ -51,19 +51,19 @@ jobs:
 
       # Get Artifact S3 bucket
       - id: check_artifact_s3
-        run: aws s3api head-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}}
+        run: echo "s3_check_1=$(aws s3api head-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}})"
         working-directory: ./backend
 
       - id: check_artifact_s3_2
-        run: aws s3api head-bucket --bucket ls_test_varun --region ${{steps.Region.outputs.value}}
+        run: echo "s3_check_2=$(aws s3api head-bucket --bucket ls_test_varun --region ${{steps.Region.outputs.value}})"
         working-directory: ./backend
 
-      - run: echo ${{steps.check_artifact_s3.outputs}}
-      - run: echo ${{steps.check_artifact_s3.conclusion}}
-      - run: echo ${{steps.check_artifact_s3.outcome}}
-      - run: echo ${{steps.check_artifact_s3_2.outputs}}
-      - run: echo ${{steps.check_artifact_s3_2.conclusion}}
-      - run: echo ${{steps.check_artifact_s3_2.outcome}}
+      - run: echo ${{steps.check_artifact_s3.outputs.s3_check_1}}
+      - run: echo ${{steps.check_artifact_s3.outcome.s3_check_1}}
+      - run: echo ${{steps.check_artifact_s3.conclusion.s3_check_1}}
+      - run: echo ${{steps.check_artifact_s3_2.outputs.s3_check_2}}
+      - run: echo ${{steps.check_artifact_s3_2.outcome.s3_check_2}}
+      - run: echo ${{steps.check_artifact_s3_2.conclusion.s3_check_2}}
       # Creating Artifact S3 Bucket
       # - if: steps.check_artifact_s3.outputs
       #   run: aws s3api create-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}}
