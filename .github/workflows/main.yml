@@ -1,0 +1,109 @@
+on:
+  push:
+    branches:
+      - feat/deployment
+jobs:
+  Build_Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Init
+      - uses: actions/checkout@v2
+
+      # Use node 16
+      - name: Setup Node.js v16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      # Variable declaration from samconfig.toml file
+      - id: Region
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.region"
+
+      - id: S3_Bucket_For_Artifacts
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.s3_bucket_for_artifacts"
+
+      - id: Stack_Name
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.stack_name"
+
+      - id: S3_Bucket_Name
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "${{ github.workspace }}/backend/samconfig.toml"
+          field: "default.deploy.parameters.s3_bucket_name"
+
+      # AWS Configuration
+      - uses: actions/setup-python@v2
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{steps.Region.outputs.value}}
+
+      # Checking if there is an Artifact S3 bucket present
+      - id: check_artifact_s3
+        run: aws s3api head-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}}
+        working-directory: ./backend
+
+      # Creating Artifact S3 Bucket if not present
+      - if: ${{failure()}}
+        run: aws s3api create-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}} --create-bucket-configuration LocationConstraint=${{steps.Region.outputs.value}}
+        working-directory: ./backend
+
+      # SAM Build
+      - run: sam build --use-container --template-file template.yaml
+        working-directory: ./backend
+
+      # SAM Deploy
+      - run: sam deploy --s3-bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --no-fail-on-empty-changeset --config-file samconfig.toml
+        working-directory: ./backend
+
+      # Cloudformation output taken to set dynamic linking with frontend
+      - id: cf_lambda_url
+        name: Setting Lambda Url for VITE
+        run: echo "cf_output1=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[1].OutputValue")" >> $GITHUB_OUTPUT
+
+      - id: cf_api_id
+        name: Setting API Id for VITE
+        run: echo "cf_output2=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[0].OutputValue")" >> $GITHUB_OUTPUT
+
+
+      # Installing Dependencies for Frontend
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      # Clearing S3 bucket where frontend old build is stored
+      - name: Clearing older version
+        run: aws s3api delete-object --bucket ${{steps.S3_Bucket_Name.outputs.value}} --key "assets/"
+        working-directory: ./frontend
+
+      # Build Frontend
+      - run: npm run build
+        env:
+          VITE_LAMBDA_URL: ${{steps.cf_lambda_url.outputs.cf_output1}}
+          VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
+          VITE_REGION: ${{steps.Region.outputs.value}}
+        working-directory: ./frontend
+
+      # # Upload the build to S3
+      - uses: jakejarvis/s3-sync-action@master
+        env:
+          AWS_S3_BUCKET: ${{steps.S3_Bucket_Name.outputs.value}}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{steps.Region.outputs.value}}
+          SOURCE_DIR: ./frontend/dist

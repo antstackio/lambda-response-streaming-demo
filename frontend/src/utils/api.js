@@ -10,14 +10,13 @@ const apiCallStreamingResponse = (
   const separator = "${Separator}";
   const apiStartTime = Date.now();
 
-  fetch(
-    `https://igvxeczeq7jnmbc6vdve4mw6vq0cupbf.lambda-url.ap-south-1.on.aws/`,
-    {
-      method: "GET",
-      redirect: "follow",
-      responseType: "stream",
-    }
-  )
+  let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
+
+  fetch(lambdaUrl, {
+    method: "GET",
+    redirect: "follow",
+    responseType: "stream",
+  })
     .then((response) => {
       // Stream reader
       const reader = response.body.getReader();
@@ -113,9 +112,18 @@ const apiCallRegularResponse = (
   setDdbItems,
   setDdbItemsSize
 ) => {
+  let apiId = import.meta.env.VITE_API_ID;
+  let region = import.meta.env.VITE_REGION;
+  let apiUrl = [
+    "https://",
+    apiId,
+    ".execute-api.",
+    region,
+    ".amazonaws.com/prod/regular",
+  ];
+  apiUrl = apiUrl.join("").replace(/"([^"]+(?="))"/g, "$1");
   const apiStartTime = Date.now();
-
-  fetch(`https://xvbk8vsrbi.execute-api.ap-south-1.amazonaws.com/prod/regular`)
+  fetch(apiUrl)
     .then((response) => {
       return response.json();
     })
