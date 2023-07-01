@@ -34,7 +34,7 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.stack_name"
 
-      - id: S3_Bucket_Name
+      - id: Parameters
         uses: SebRollen/toml-action@v1.0.2
         with:
           file: "${{ github.workspace }}/backend/samconfig.toml"
@@ -49,7 +49,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{steps.Region.outputs.value}}
 
-      # # Checking if there is an Artifact S3 bucket present
+      # Checking if there is an Artifact S3 bucket present
       # - id: check_artifact_s3
       #   run: aws s3api head-bucket --bucket ${{steps.S3_Bucket_For_Artifacts.outputs.value}} --region ${{steps.Region.outputs.value}}
       #   working-directory: ./backend
@@ -88,8 +88,9 @@ jobs:
 
       # Clearing S3 bucket where frontend old build is stored
       - name: Clearing older version
-        run: echo ${{steps.S3_Bucket_Name.outputs.value[0]}}
-        # run: aws s3api delete-object --bucket ${{steps.S3_Bucket_Name.outputs.value}} --key "assets/"
+        run: |
+          bucketName=$(echo ${{steps.Parameters.outputs.value}} | cut -c 1-28 | cut -d"\"" -f 2)
+          aws s3api delete-object --bucket $bucketName --key "assets/"
         working-directory: ./frontend
 
       # Build Frontend
