@@ -88,7 +88,7 @@ jobs:
 
       # Clearing S3 bucket where frontend old build is stored
       - name: Clearing older version
-        run: echo ${{steps.S3_Bucket_Name.outputs.value}}
+        run: echo ${{steps.S3_Bucket_Name.outputs.value[0]}}
         # run: aws s3api delete-object --bucket ${{steps.S3_Bucket_Name.outputs.value}} --key "assets/"
         working-directory: ./frontend
 
