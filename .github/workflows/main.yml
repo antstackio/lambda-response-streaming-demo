@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - feat/deployment
+      - main
 jobs:
   Build_Deploy:
     runs-on: ubuntu-latest
