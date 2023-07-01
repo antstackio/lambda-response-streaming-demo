@@ -38,7 +38,7 @@ jobs:
         uses: SebRollen/toml-action@v1.0.2
         with:
           file: "${{ github.workspace }}/backend/samconfig.toml"
-          field: "default.deploy.parameters.s3_bucket_name"
+          field: "default.deploy.parameters.parameter_overrides.S3BucketName"
 
       # AWS Configuration
       - uses: actions/setup-python@v2
