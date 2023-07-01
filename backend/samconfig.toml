@@ -8,4 +8,4 @@ capabilities = "CAPABILITY_IAM"
 image_repositories = []
 # below you need to mention your s3 bucket name twice
 parameter_overrides = "S3BucketName=\"lrs-test-supercharged-streaming\" DynamoDBScanName=\"lrs-scandb-table\" DynamoDBQueryName=\"lrs-querydb-table\""
-s3_bucket_name = "sandy-samcli-bucket"
+s3_bucket_name = "lrs-test-supercharged-streaming"
