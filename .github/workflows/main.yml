@@ -42,7 +42,7 @@ jobs:
         
       - id: s3_bucket_name
         name: Setting S3 Bucket Name
-        run: echo "bucket_name=$('${{steps.Parameters.outputs.value}}' | cut -d""\" -f 2 | sed 's/\\//g')" >> $GITHUB_OUTPUT
+        run: echo "bucket_name=$(echo '${{steps.Parameters.outputs.value}}' | cut -d""\" -f 2 | sed 's/\\//g')" >> $GITHUB_OUTPUT
 
       # AWS Configuration
       - uses: actions/setup-python@v2
