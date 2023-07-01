@@ -90,7 +90,8 @@ jobs:
       - name: Clearing older version
         run: |
           bucketName=$(echo '${{steps.Parameters.outputs.value}}' | cut -c 1-28 | cut -d"\"" -f 2)
-          aws s3api delete-object --bucket $bucketName --key "assets/"
+          echo $bucketName
+          # aws s3api delete-object --bucket $bucketName --key "assets/"
         working-directory: ./frontend
 
       # Build Frontend
