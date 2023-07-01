@@ -7,5 +7,5 @@ region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
 # below you need to mention your s3 bucket name twice
-parameter_overrides = "S3BucketName=\"ls-test-varun\" DynamoDBScanName=\"varun-scandb-table\" DynamoDBQueryName=\"varun-querydb-table\""
+parameter_overrides = ["S3BucketName=ls-test-varun", "DynamoDBScanName=varun-scandb-table", "DynamoDBQueryName=varun-querydb-table"]
 s3_bucket_name = "ls-test-varun"
