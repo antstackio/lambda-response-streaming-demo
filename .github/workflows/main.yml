@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - feat/deployment
 jobs:
   Build_Deploy:
     runs-on: ubuntu-latest
@@ -34,11 +34,15 @@ jobs:
           file: "${{ github.workspace }}/backend/samconfig.toml"
           field: "default.deploy.parameters.stack_name"
 
-      - id: S3_Bucket_Name
+      - id: Parameters
         uses: SebRollen/toml-action@v1.0.2
         with:
           file: "${{ github.workspace }}/backend/samconfig.toml"
-          field: "default.deploy.parameters.s3_bucket_name"
+          field: "default.deploy.parameters.parameter_overrides"
+        
+      - id: s3_bucket_name
+        name: Setting S3 Bucket Name
+        run: echo "bucket_name=$(echo '${{steps.Parameters.outputs.value}}' | cut -d""\" -f 2 | sed 's/\\//g')" >> $GITHUB_OUTPUT
 
       # AWS Configuration
       - uses: actions/setup-python@v2
@@ -76,7 +80,6 @@ jobs:
         name: Setting API Id for VITE
         run: echo "cf_output2=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[0].OutputValue")" >> $GITHUB_OUTPUT
 
-
       # Installing Dependencies for Frontend
       - name: Set up Node
         uses: actions/setup-node@v3
@@ -88,7 +91,7 @@ jobs:
 
       # Clearing S3 bucket where frontend old build is stored
       - name: Clearing older version
-        run: aws s3api delete-object --bucket ${{steps.S3_Bucket_Name.outputs.value}} --key "assets/"
+        run: aws s3api delete-object --bucket ${{steps.s3_bucket_name.outputs.bucket_name}} --key "assets/"
         working-directory: ./frontend
 
       # Build Frontend
@@ -99,10 +102,10 @@ jobs:
           VITE_REGION: ${{steps.Region.outputs.value}}
         working-directory: ./frontend
 
-      # # Upload the build to S3
+      # Upload the build to S3
       - uses: jakejarvis/s3-sync-action@master
         env:
-          AWS_S3_BUCKET: ${{steps.S3_Bucket_Name.outputs.value}}
+          AWS_S3_BUCKET: ${{steps.s3_bucket_name.outputs.bucket_name}}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{steps.Region.outputs.value}}
