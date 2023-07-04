@@ -1,10 +1,9 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "ls-test-varun"
-s3_bucket_for_artifacts = "ls-test-s3-arti-varun"
-s3_prefix = "ls-test-varun"
+stack_name = "ls-test-sandy"
+s3_bucket_for_artifacts = "sandy-samcli-bucket"
+s3_prefix = "ls-test-sandy"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-# below you need to mention your s3 bucket name twice
-parameter_overrides = "S3BucketName=\"ls-test-varun\" DynamoDBScanName=\"varun-scandb-table\" DynamoDBQueryName=\"varun-querydb-table\""
+parameter_overrides = "S3BucketName=\"ls-test-sandy\" DynamoDBScanName=\"sandy-scandb-table\" DynamoDBQueryName=\"sandy-querydb-table\""
