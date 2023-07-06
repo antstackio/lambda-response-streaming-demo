@@ -43,6 +43,14 @@ jobs:
       - id: s3_bucket_name
         name: Setting S3 Bucket Name
         run: echo "bucket_name=$(echo '${{steps.Parameters.outputs.value}}' | cut -d""\" -f 2 | sed 's/\\//g')" >> $GITHUB_OUTPUT
+        
+      - id: scan_table
+        name: Setting S3 Bucket Name
+        run: echo "table_name=$(echo '${{steps.Parameters.outputs.value}}' | cut -d""\" -f 4 | sed 's/\\//g')" >> $GITHUB_OUTPUT
+        
+      - id: query_table
+        name: Setting S3 Bucket Name
+        run: echo "table_name=$(echo '${{steps.Parameters.outputs.value}}' | cut -d""\" -f 6 | sed 's/\\//g')" >> $GITHUB_OUTPUT
 
       # AWS Configuration
       - uses: actions/setup-python@v2
@@ -110,3 +118,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{steps.Region.outputs.value}}
           SOURCE_DIR: ./frontend/dist
+
+      # Upload CSV data to dynamodb
+      - run: python3 uploadToDynamoDb.py
+        working-directory: ./
+        env:
+          AWS_REGION: ${{steps.Region.outputs.value}}
+          SCAN_TABLE: ${{steps.scan_table.outputs.table_name}}
+          QUERY_TABLE: ${{steps.query_table.outputs.table_name}}
