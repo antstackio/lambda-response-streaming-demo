@@ -7,7 +7,7 @@ region = os.environ["AWS_REGION"]
 scan_db_table = os.environ["SCAN_TABLE"]
 query_db_table = os.environ["QUERY_TABLE"]
 
-reader = csv.DictReader(open('data.csv', newline=""), dialect="excel")
+reader = csv.DictReader(open('sourceData.csv', newline=""), dialect="excel")
 myArr = [dict(row) for row in reader]
 
 my_session = boto3.session.Session(region_name=region)
