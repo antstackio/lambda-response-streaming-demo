@@ -1,6 +1,6 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "ls-test-varun"
+stack_name = "ls-varun-new"
 s3_bucket_for_artifacts = "varun-samcli-bucket"
 s3_prefix = "ls-test-varun"
 region = "ap-south-1"
