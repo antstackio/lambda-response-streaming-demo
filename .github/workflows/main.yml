@@ -2,13 +2,14 @@ on:
   push:
     branches:
       - feat/deployment
-  
+      
   workflow_dispatch:
     inputs:
       dynamoPut:
         description: 'Put source data in db'     
         required: true
-        default: 'false'
+        type: boolean
+        default: false
 
 jobs:
   Build_Deploy:
