@@ -10,16 +10,23 @@ const apiCallStreamingResponse = (
   const separator = "${Separator}";
   const apiStartTime = Date.now();
 
-  let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
+  // let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
+  let apiId = import.meta.env.VITE_API_ID;
+  let region = import.meta.env.VITE_REGION;
+  let apiUrl = [
+    "https://",
+    apiId,
+    ".execute-api.",
+    region,
+    ".amazonaws.com/prod/response_streaming",
+  ];
+  apiUrl = apiUrl.join("").replace(/"([^"]+(?="))"/g, "$1");
 
-  fetch(
-    "https://cd5tvlq2xmfugk6tepxzwlghui0wqoim.lambda-url.ap-south-1.on.aws",
-    {
-      method: "GET",
-      redirect: "follow",
-      responseType: "stream",
-    }
-  )
+  fetch(apiUrl, {
+    method: "GET",
+    redirect: "follow",
+    responseType: "stream",
+  })
     .then((response) => {
       // Stream reader
       const reader = response.body.getReader();
