@@ -104,7 +104,7 @@ with query_table.batch_writer() as batch:
     for i in array_of_item:
         batch.put_item(Item=i)
 
-# print("INSERTED DATA SOURCE IN QUERY TABLE")
+print("INSERTED DATA SOURCE IN QUERY TABLE")
 
 with scan_table.batch_writer() as batch:
     for i in array_of_item:

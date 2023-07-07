@@ -19,7 +19,7 @@ const ResponseStreamTable = () => {
       y: "30vh",
     },
   };
-
+  console.log("HELLU!!");
   useEffect(() => {
     apiCallStreamingResponse(
       setData,
@@ -28,6 +28,7 @@ const ResponseStreamTable = () => {
       setDdbItems,
       setDdbItemsSize
     );
+    console.log("HELLU!22!");
   }, []);
 
   const { Title } = Typography;

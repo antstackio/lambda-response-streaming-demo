@@ -21,6 +21,7 @@ const apiCallStreamingResponse = (
       // Stream reader
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      console.log({ response });
       return new ReadableStream({
         start(controller) {
           function push() {
