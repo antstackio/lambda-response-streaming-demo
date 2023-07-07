@@ -6,4 +6,4 @@ s3_prefix = "ls-test-varun"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-parameter_overrides = "S3BucketName=\"varun-ls-test\" DynamoDBScanName=\"varun-scandb-table\" DynamoDBQueryName=\"varun-querydb-table\""
+parameter_overrides = "S3BucketName=\"varun-ls-test\" DynamoDBScanName=\"varun-scan-table\" DynamoDBQueryName=\"varun-query-table\""
