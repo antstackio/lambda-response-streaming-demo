@@ -120,13 +120,13 @@ jobs:
           SOURCE_DIR: ./frontend/dist
 
       # Install requirements.txt file
-      - run: python3 -m pip install -r requirements.txt
-        working-directory: ./
+      # - run: python3 -m pip install -r requirements.txt
+      #   working-directory: ./
 
-      # Upload CSV data to dynamodb
-      - run: python3 uploadToDynamoDb.py
-        working-directory: ./
-        env:
-          AWS_REGION: ${{steps.Region.outputs.value}}
-          SCAN_TABLE: ${{steps.scan_table.outputs.table_name}}
-          QUERY_TABLE: ${{steps.query_table.outputs.table_name}}
+      # # Upload CSV data to dynamodb
+      # - run: python3 uploadToDynamoDb.py
+      #   working-directory: ./
+      #   env:
+      #     AWS_REGION: ${{steps.Region.outputs.value}}
+      #     SCAN_TABLE: ${{steps.scan_table.outputs.table_name}}
+      #     QUERY_TABLE: ${{steps.query_table.outputs.table_name}}

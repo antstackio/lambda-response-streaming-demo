@@ -11,7 +11,7 @@ exports.handler = async (event) => {
     const params = {
       TableName: tableName,
       ExclusiveStartKey: startKey,
-      Limit: 250,
+      Limit: 200,
     };
 
     // Use the DynamoDB object to scan the table with the specified parameters
