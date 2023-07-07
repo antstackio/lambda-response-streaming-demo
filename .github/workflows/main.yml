@@ -1,8 +1,9 @@
+name: single click deployment
 on:
   push:
     branches:
       - feat/deployment
-      
+
   workflow_dispatch:
     inputs:
       dynamoPut:
