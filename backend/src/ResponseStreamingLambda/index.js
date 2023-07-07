@@ -8,6 +8,7 @@ exports.handler = awslambda.streamifyResponse(
       statusCode: 200,
       headers: {
         "Content-Type": "text/html",
+        "Access-Control-Allow-Origin": "*",
       },
     };
 
