@@ -21,8 +21,9 @@ const apiCallStreamingResponse = (
   //   ".amazonaws.com/prod/response_streaming",
   // ];
   // apiUrl = apiUrl.join("").replace(/"([^"]+(?="))"/g, "$1");
-
-  fetch(`${lambdaUrl}`, {
+  lambdaUrl = lambdaUrl.replace('""', '');
+  console.log({lambdaUrl});
+  fetch(lambdaUrl, {
     method: "GET",
     redirect: "follow",
     responseType: "stream",
