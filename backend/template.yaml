@@ -91,7 +91,7 @@ Resources:
     Type: AWS::Lambda::Url
     Properties:
       TargetFunctionArn: !Ref ResponseStreamingFunction
-      AuthType: NONE
+      AuthType: AWS_IAM
       InvokeMode: RESPONSE_STREAM
 
   ResponseStreamingFunctionApi:
