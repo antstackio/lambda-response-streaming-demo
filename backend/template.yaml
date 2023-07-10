@@ -58,7 +58,7 @@ Resources:
       MemorySize: 1024
       AutoPublishAlias: live
       FunctionUrlConfig:
-        AuthType: NONE
+        AuthType: AWS_IAM
         InvokeMode: RESPONSE_STREAM
       Environment:
         Variables:
@@ -91,7 +91,7 @@ Resources:
     Type: AWS::Lambda::Url
     Properties:
       TargetFunctionArn: !Ref ResponseStreamingFunction
-      AuthType: AWS_IAM
+      AuthType: NONE
       InvokeMode: RESPONSE_STREAM
 
   ResponseStreamingFunctionApi:
