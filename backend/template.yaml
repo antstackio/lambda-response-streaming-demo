@@ -58,7 +58,7 @@ Resources:
       MemorySize: 1024
       AutoPublishAlias: live
       FunctionUrlConfig:
-        AuthType: AWS_IAM
+        AuthType: NONE
         InvokeMode: RESPONSE_STREAM
       Environment:
         Variables:
