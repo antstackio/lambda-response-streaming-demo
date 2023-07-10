@@ -11,18 +11,8 @@ const apiCallStreamingResponse = (
   const apiStartTime = Date.now();
 
   let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
-  // let apiId = import.meta.env.VITE_API_ID;
-  // let region = import.meta.env.VITE_REGION;
-  // let apiUrl = [
-  //   "https://",
-  //   apiId,
-  //   ".execute-api.",
-  //   region,
-  //   ".amazonaws.com/prod/response_streaming",
-  // ];
-  // apiUrl = apiUrl.join("").replace(/"([^"]+(?="))"/g, "$1");
-  lambdaUrl = lambdaUrl.replace(/['"]+/g, '');
-  console.log({ lambdaUrl });
+  lambdaUrl = lambdaUrl.replace(/['"]+/g, "");
+
   fetch(lambdaUrl, {
     method: "GET",
     redirect: "follow",

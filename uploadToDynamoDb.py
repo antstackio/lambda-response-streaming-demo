@@ -3,8 +3,8 @@ import csv
 import boto3
 
 region = os.environ["AWS_REGION"]
-scan_db_table = os.environ["SCAN_TABLE"]
-query_db_table = os.environ["QUERY_TABLE"]
+scan_db_table = os.environ["SCAN_TABLE"] 
+query_db_table = os.environ["QUERY_TABLE"] 
 
 reader = csv.DictReader(open('sourceData.csv', newline=""), dialect="excel")
 myArr = [dict(row) for row in reader]
