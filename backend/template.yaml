@@ -193,7 +193,7 @@ Resources:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
         PriceClass: "PriceClass_All"
 
-  ChatGPTFunction:
+  ChatGPTStreamingFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/ChatGPTLambda
@@ -214,7 +214,7 @@ Resources:
   ChatGPTFunctionUrl:
     Type: AWS::Lambda::Url
     Properties:
-      TargetFunctionArn: !Ref ChatGPTFunction
+      TargetFunctionArn: !Ref ChatGPTStreamingFunction
       AuthType: NONE
       InvokeMode: RESPONSE_STREAM
 
