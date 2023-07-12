@@ -18,7 +18,7 @@ exports.handler = awslambda.streamifyResponse(
 
       console.info(messageJson);
     } else {
-      messageJson = [{ role: "assistant", content: null }];
+      messageJson = [{ role: "user", content: "Hello" }];
     }
 
     const openai = new OpenAIApi(configuration);
