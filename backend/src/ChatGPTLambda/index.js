@@ -13,7 +13,8 @@ let messageJson = [
 
 exports.handler = awslambda.streamifyResponse(
   async (event, responseStream, context) => {
-    console.log(JSON.stringify(event.body));
+    messageJson = messageJson.push(JSON.stringify(event.body));
+    console.log(messageJson);
     const httpResponseMetadata = {
       statusCode: 200,
       headers: {
@@ -35,7 +36,7 @@ exports.handler = awslambda.streamifyResponse(
     );
 
     // Send the scan result to the stream
-    responseStream.write(completion.data.choices[0].delta);
+    responseStream.write(completion.data);
 
     // End stream
     responseStream.end();
