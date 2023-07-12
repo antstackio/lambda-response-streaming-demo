@@ -193,6 +193,19 @@ Resources:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
         PriceClass: "PriceClass_All"
 
+  StreamingLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleArchitectures:
+        - x86_64
+      CompatibleRuntimes:
+        - nodejs18.x
+      ContentUri: utils/
+      Description: Lambda layer for openai package
+      LayerName: Lambda-Layer-Streaming
+    Metadata:
+      BuildMethod: nodejs18.x
+
   ChatGPTStreamingFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -205,7 +218,7 @@ Resources:
       FunctionUrlConfig:
         AuthType: AWS_IAM
         InvokeMode: RESPONSE_STREAM
-      # Layers:
+      Layers: !Ref StreamingLambdaLayer
       Environment:
         Variables:
           API_KEY: >-
