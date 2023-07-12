@@ -218,7 +218,8 @@ Resources:
       FunctionUrlConfig:
         AuthType: AWS_IAM
         InvokeMode: RESPONSE_STREAM
-      Layers: !Ref StreamingLambdaLayer
+      Layers:
+        - !Ref StreamingLambdaLayer
       Environment:
         Variables:
           API_KEY: >-
