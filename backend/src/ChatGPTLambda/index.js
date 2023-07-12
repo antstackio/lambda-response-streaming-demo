@@ -8,14 +8,18 @@ const configuration = new Configuration({
 
 exports.handler = awslambda.streamifyResponse(
   async (event, responseStream, context) => {
-    console.info(JSON.stringify(event.body));
-
     let messageJson = [];
-    event.body.map((data) => {
-      messageJson.push(data);
-    });
+    if (event?.body) {
+      console.info(JSON.stringify(event?.body));
 
-    console.info(messageJson);
+      event.body.map((data) => {
+        messageJson.push(data);
+      });
+
+      console.info(messageJson);
+    } else {
+      messageJson = [{ role: "assistant", content: null }];
+    }
 
     const openai = new OpenAIApi(configuration);
 
