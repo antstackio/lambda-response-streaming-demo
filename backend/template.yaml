@@ -225,5 +225,5 @@ Outputs:
     Value: !GetAtt ResponseStreamingFunctionApi.RestApiId
   CloudFrontDomainName:
     Value: !GetAtt CloudFrontDistribution.DomainName
-  ChatGPTFunctionUrl:
+  ChatGPTFunctionStreamingURL:
     Value: !GetAtt ChatGPTFunctionUrl.FunctionUrl
