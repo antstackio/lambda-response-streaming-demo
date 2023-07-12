@@ -6,22 +6,17 @@ const configuration = new Configuration({
   apiKey: process.env.API_KEY,
 });
 
-let messageJson = [
-  { role: "system", content: "You are a helpful assistant." },
-  { role: "user", content: "Hello world" },
-];
-
 exports.handler = awslambda.streamifyResponse(
   async (event, responseStream, context) => {
-    messageJson = messageJson.push(JSON.stringify(event.body));
-    console.log(messageJson);
-    const httpResponseMetadata = {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "text/html",
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
+    console.info(JSON.stringify(event.body));
+
+    let messageJson = [];
+    event.body.map((data) => {
+      messageJson.push(data);
+    });
+
+    console.info(messageJson);
+
     const openai = new OpenAIApi(configuration);
 
     const completion = await openai.createChatCompletion({
@@ -29,6 +24,14 @@ exports.handler = awslambda.streamifyResponse(
       stream: true,
       messages: messageJson,
     });
+
+    const httpResponseMetadata = {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "text/html",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
 
     responseStream = awslambda.HttpResponseStream.from(
       responseStream,
