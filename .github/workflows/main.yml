@@ -10,7 +10,7 @@ on:
 
   push:
     branches:
-      - feat/deployment
+      - feat/chatgpt
 
 jobs:
   Build_Deploy:

@@ -193,6 +193,31 @@ Resources:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
         PriceClass: "PriceClass_All"
 
+  ChatGPTFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/ChatGPTLambda
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Timeout: 30
+      MemorySize: 1024
+      AutoPublishAlias: live
+      FunctionUrlConfig:
+        AuthType: AWS_IAM
+        InvokeMode: RESPONSE_STREAM
+      # Layers:
+      Environment:
+        Variables:
+          API_KEY: >-
+            {{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}
+
+  ChatGPTFunctionUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      TargetFunctionArn: !Ref ChatGPTFunction
+      AuthType: NONE
+      InvokeMode: RESPONSE_STREAM
+
 Outputs:
   ResponseLambdaUrl:
     Value: !GetAtt ResponseStreamingFunctionUrl2.FunctionUrl
@@ -200,3 +225,5 @@ Outputs:
     Value: !GetAtt ResponseStreamingFunctionApi.RestApiId
   CloudFrontDomainName:
     Value: !GetAtt CloudFrontDistribution.DomainName
+  ChatGPTFunctionUrl:
+    Value: !GetAtt ChatGPTFunctionUrl.FunctionUrl
