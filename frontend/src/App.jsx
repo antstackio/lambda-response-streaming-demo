@@ -1,8 +1,5 @@
-// import ResponseStreamTable from "./features/ResponseStreamAPITable";
-// import RegularTable from "./features/RegularAPITable";
-import Dashboard from "./containers/Dashboard";
-
+import Navigation from "./containers/Navigation";
 const App = () => {
-  return <Dashboard />;
+  return <Navigation />;
 };
 export default App;

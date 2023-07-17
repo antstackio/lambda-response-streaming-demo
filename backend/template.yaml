@@ -4,141 +4,27 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   S3BucketName:
     Type: String
-    Default: lambda-res-stream-sandy
+    Default: hosted-bucket
   DynamoDBScanName:
     Type: String
-    Default: sandy_scan_table2
+    Default: scan-db
   DynamoDBQueryName:
     Type: String
-    Default: sandy_query_table2
+    Default: query-db
 
 Resources:
-  RegularFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/RegularLambda
-      Handler: index.handler
-      Runtime: nodejs16.x
-      Timeout: 30
-      MemorySize: 1024
-      AutoPublishAlias: live
-      Environment:
-        Variables:
-          SCAN_DB_NAME: !Ref DynamoDBScanName
-      Events:
-        ApiEvent:
-          Type: Api
-          Properties:
-            Path: /regular
-            Method: get
-            RestApiId:
-              Ref: ResponseStreamingFunctionApi
-    Connectors:
-      ScanTableConnector:
-        Properties:
-          Destination:
-            Id: ScanTable2
-          Permissions:
-            - Write
-            - Read
-      QueryTableConnector:
-        Properties:
-          Destination:
-            Id: QueryTable2
-          Permissions:
-            - Write
-            - Read
-  ResponseStreamingFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/ResponseStreamingLambda
-      Handler: index.handler
-      Runtime: nodejs16.x
-      Timeout: 30
-      MemorySize: 1024
-      AutoPublishAlias: live
-      FunctionUrlConfig:
-        AuthType: AWS_IAM
-        InvokeMode: RESPONSE_STREAM
-      Environment:
-        Variables:
-          SCAN_DB_NAME: !Ref DynamoDBScanName
-      Events:
-        ApiEvent:
-          Type: Api
-          Properties:
-            Path: /response_streaming
-            Method: get
-            RestApiId:
-              Ref: ResponseStreamingFunctionApi
-    Connectors:
-      ScanTableConnector:
-        Properties:
-          Destination:
-            Id: ScanTable2
-          Permissions:
-            - Write
-            - Read
-      QueryTableConnector:
-        Properties:
-          Destination:
-            Id: QueryTable2
-          Permissions:
-            - Write
-            - Read
-
-  ResponseStreamingFunctionUrl2:
-    Type: AWS::Lambda::Url
-    Properties:
-      TargetFunctionArn: !Ref ResponseStreamingFunction
-      AuthType: NONE
-      InvokeMode: RESPONSE_STREAM
-
-  ResponseStreamingFunctionApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: prod
-
-  ScanTable2:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Ref DynamoDBScanName
-      AttributeDefinitions:
-        - AttributeName: "id"
-          AttributeType: "S"
-      KeySchema:
-        - AttributeName: "id"
-          KeyType: "HASH"
-      BillingMode: PAY_PER_REQUEST
-
-  QueryTable2:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Ref DynamoDBQueryName
-      AttributeDefinitions:
-        - AttributeName: "id"
-          AttributeType: "S"
-        - AttributeName: "category"
-          AttributeType: "S"
-      KeySchema:
-        - AttributeName: "category"
-          KeyType: "HASH"
-        - AttributeName: "id"
-          KeyType: "RANGE"
-      BillingMode: PAY_PER_REQUEST
-
+  # Website Hosting Services - Start
   S3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Ref S3BucketName
+      BucketName: !Sub "${AWS::StackName}-${S3BucketName}"
       WebsiteConfiguration:
         IndexDocument: "index.html"
 
-  # Configure the bucket as a CloudFront Origin
   ReadPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref S3BucketName
+      Bucket: !Ref S3Bucket
       PolicyDocument:
         Statement:
           - Action: "s3:GetObject"
@@ -147,7 +33,6 @@ Resources:
             Principal:
               CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
 
-  # Configure Access to CloudFroun
   CloudFrontOriginAccessIdentity:
     Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
     Properties:
@@ -192,7 +77,131 @@ Resources:
             S3OriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
         PriceClass: "PriceClass_All"
+  # Website Hosting Services - End
 
+  # API
+  ResponseStreamingFunctionApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+
+  # Lambdas - DDB Use Case
+  DDBRegularLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/DDBRegularLambda
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Timeout: 30
+      MemorySize: 1024
+      Environment:
+        Variables:
+          SCAN_DB_NAME: !Sub "${AWS::StackName}-${DynamoDBScanName}"
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /regular
+            Method: get
+            RestApiId:
+              Ref: ResponseStreamingFunctionApi
+    Connectors:
+      ScanTableConnector:
+        Properties:
+          Destination:
+            Id: ScanTable
+          Permissions:
+            - Write
+            - Read
+      QueryTableConnector:
+        Properties:
+          Destination:
+            Id: QueryTable
+          Permissions:
+            - Write
+            - Read
+  DDBStreamingLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/DDBStreamingLambda
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Timeout: 30
+      MemorySize: 1024
+      AutoPublishAlias: live
+      Environment:
+        Variables:
+          SCAN_DB_NAME: !Sub "${AWS::StackName}-${DynamoDBScanName}"
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /response_streaming
+            Method: get
+            RestApiId:
+              Ref: ResponseStreamingFunctionApi
+    Connectors:
+      ScanTableConnector:
+        Properties:
+          Destination:
+            Id: ScanTable
+          Permissions:
+            - Write
+            - Read
+      QueryTableConnector:
+        Properties:
+          Destination:
+            Id: QueryTable
+          Permissions:
+            - Write
+            - Read
+
+  DDBStreamingLambdaUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      AuthType: NONE
+      Cors:
+        AllowOrigins: ["*"]
+      InvokeMode: RESPONSE_STREAM
+      TargetFunctionArn: !Ref DDBStreamingLambda
+
+  DDBStreamingLambdaPublicAccess:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DDBStreamingLambda
+      Principal: "*"
+
+  # DDB Tables
+  ScanTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${AWS::StackName}-${DynamoDBScanName}"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+
+  QueryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${AWS::StackName}-${DynamoDBQueryName}"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "category"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "category"
+          KeyType: "HASH"
+        - AttributeName: "id"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
+
+  # Lambdas - ChatGPT Use Case
   StreamingLambdaLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -205,19 +214,15 @@ Resources:
       LayerName: Lambda-Layer-Streaming
     Metadata:
       BuildMethod: nodejs18.x
-
   ChatGPTStreamingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/ChatGPTLambda
+      CodeUri: src/ChatGPTStreamingLambda
       Handler: index.handler
       Runtime: nodejs16.x
       Timeout: 30
       MemorySize: 1024
       AutoPublishAlias: live
-      FunctionUrlConfig:
-        AuthType: AWS_IAM
-        InvokeMode: RESPONSE_STREAM
       Layers:
         - !Ref StreamingLambdaLayer
       Environment:
@@ -225,19 +230,50 @@ Resources:
           API_KEY: >-
             {{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}
 
-  ChatGPTFunctionUrl:
+  ChatGPTStreamingFunctionUrl:
     Type: AWS::Lambda::Url
     Properties:
-      TargetFunctionArn: !Ref ChatGPTStreamingFunction
       AuthType: NONE
+      Cors:
+        AllowOrigins: ["*"]
       InvokeMode: RESPONSE_STREAM
+      TargetFunctionArn: !Ref ChatGPTStreamingFunction
+
+  ChatGPTStreamingFunctionPublicAccess:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ChatGPTStreamingFunction
+      Principal: "*"
+  ChatGPTRegularLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/ChatGPTRegularLambda
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Timeout: 30
+      MemorySize: 1024
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /chatgpt_regular
+            Method: post
+            RestApiId:
+              Ref: ResponseStreamingFunctionApi
+      Layers:
+        - !Ref StreamingLambdaLayer
+      Environment:
+        Variables:
+          API_KEY: >-
+            {{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}
 
 Outputs:
-  ResponseLambdaUrl:
-    Value: !GetAtt ResponseStreamingFunctionUrl2.FunctionUrl
+  ResponseLambdaUrlDDB:
+    Value: !GetAtt DDBStreamingLambdaUrl.FunctionUrl
+  ResponseLambdaUrlChatGPT:
+    Value: !GetAtt ChatGPTStreamingFunctionUrl.FunctionUrl
   ApiResourceId:
     Value: !GetAtt ResponseStreamingFunctionApi.RestApiId
   CloudFrontDomainName:
     Value: !GetAtt CloudFrontDistribution.DomainName
-  ChatGPTFunctionStreamingURL:
-    Value: !GetAtt ChatGPTFunctionUrl.FunctionUrl
