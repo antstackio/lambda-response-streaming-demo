@@ -160,8 +160,6 @@ Resources:
     Type: AWS::Lambda::Url
     Properties:
       AuthType: NONE
-      Cors:
-        AllowOrigins: ["*"]
       InvokeMode: RESPONSE_STREAM
       TargetFunctionArn: !Ref DDBStreamingLambda
 
@@ -234,8 +232,6 @@ Resources:
     Type: AWS::Lambda::Url
     Properties:
       AuthType: NONE
-      Cors:
-        AllowOrigins: ["*"]
       InvokeMode: RESPONSE_STREAM
       TargetFunctionArn: !Ref ChatGPTStreamingFunction
 
