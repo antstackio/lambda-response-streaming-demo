@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import { tableColumns } from "../../utils/constants";
 import { LoadingOutlined } from "@ant-design/icons";
+import "./Table.css";
 
 const GenericTable = (props) => {
   return (

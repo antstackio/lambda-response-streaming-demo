@@ -4,7 +4,7 @@ const { Title } = Typography;
 import "./Header.css";
 const { Header } = Layout;
 
-const GenericHeader = () => (
+const GenericHeader = (props) => (
   <>
     <Header className="header">
       <a
@@ -16,7 +16,7 @@ const GenericHeader = () => (
       </a>
       <div>
         <Title style={{ margin: "auto" }} level={3}>
-          Revolutionizing Data Retrieval
+          {props.Title}
         </Title>
         <Title style={{ margin: "auto" }} level={5}>
           How Lambda Response Streaming APIs Beat Regular APIs

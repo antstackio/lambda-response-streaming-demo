@@ -1,12 +1,12 @@
 import { Col, Row } from "antd";
 import ResponseStreamTable from "../../features/ResponseStreamAPITable";
 import RegularTable from "../../features/RegularAPITable";
-import GenericHeader from "../Header";
-import "./Dashboard.css";
+import GenericHeader from "../../containers/Header";
 
-const Dashboard = () => (
+import "./Ddb.css";
+const DDBPage = () => (
   <>
-    <GenericHeader />
+    <GenericHeader Title="Revolutionizing Data Retrieval" />
     <Row>
       <Col span={12} className="columnStyle columnLeft">
         <ResponseStreamTable />
@@ -17,4 +17,4 @@ const Dashboard = () => (
     </Row>
   </>
 );
-export default Dashboard;
+export default DDBPage;

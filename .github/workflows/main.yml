@@ -10,7 +10,7 @@ on:
 
   push:
     branches:
-      - feat/deployment
+      - main
 
 jobs:
   Build_Deploy:
@@ -92,6 +92,10 @@ jobs:
       # Cloudformation output taken to set dynamic linking with frontend
       - id: cf_lambda_url
         name: Setting Lambda Url for VITE
+        run: echo "cf_output1=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[2].OutputValue")" >> $GITHUB_OUTPUT
+      
+      - id: chatgpt_lambda_url
+        name: Setting Chat GPT Lambda Url for VITE
         run: echo "cf_output1=$(aws cloudformation --region ${{steps.Region.outputs.value}} describe-stacks --stack-name ${{steps.Stack_Name.outputs.value}} --query "Stacks[0].Outputs[1].OutputValue")" >> $GITHUB_OUTPUT
 
       - id: cf_api_id
@@ -100,6 +104,7 @@ jobs:
       
       - run: |
           echo ${{steps.cf_lambda_url.outputs.cf_output1}}
+          echo ${{steps.chatgpt_lambda_url.outputs.cf_output1}}
           echo ${{steps.cf_api_id.outputs.cf_output2}}
 
       # Installing Dependencies for Frontend
@@ -113,20 +118,21 @@ jobs:
 
       # Clearing S3 bucket where frontend old build is stored
       - name: Clearing older version
-        run: aws s3 rm s3://${{steps.s3_bucket_name.outputs.bucket_name}} --recursive
+        run: aws s3 rm s3://'${{steps.Stack_Name.outputs.value}}'-'${{steps.s3_bucket_name.outputs.bucket_name}}' --recursive
         working-directory: ./frontend
 
       # Build Frontend
       - run: npm run build
         env:
           VITE_LAMBDA_URL: ${{steps.cf_lambda_url.outputs.cf_output1}}
+          VITE_CHAT_GPT_LAMBDA_URL: ${{steps.chatgpt_lambda_url.outputs.cf_output1}}
           VITE_API_ID: ${{steps.cf_api_id.outputs.cf_output2}}
           VITE_REGION: ${{steps.Region.outputs.value}}
         working-directory: ./frontend
 
       # Upload the build to S3
       - name: Uploading newer verision
-        run: aws s3 sync . s3://${{steps.s3_bucket_name.outputs.bucket_name}}
+        run: aws s3 sync . s3://'${{steps.Stack_Name.outputs.value}}'-'${{steps.s3_bucket_name.outputs.bucket_name}}'
         working-directory: ./frontend/dist
 
       # Install requirements.txt file

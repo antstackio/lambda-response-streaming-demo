@@ -2,9 +2,13 @@ import os
 import csv
 import boto3
 
-region = os.environ["AWS_REGION"]
-scan_db_table = os.environ["SCAN_TABLE"] 
-query_db_table = os.environ["QUERY_TABLE"] 
+# region = os.environ["AWS_REGION"]
+# scan_db_table = os.environ["SCAN_TABLE"] 
+# query_db_table = os.environ["QUERY_TABLE"] 
+
+region = "ap-south-1"
+scan_db_table = "ls-sandy-chatgpt-sandy-scan-chatgpt"
+query_db_table = "ls-sandy-chatgpt-sandy-query-chatgpt"
 
 reader = csv.DictReader(open('sourceData.csv', newline=""), dialect="excel")
 myArr = [dict(row) for row in reader]
