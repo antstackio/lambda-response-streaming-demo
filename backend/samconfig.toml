@@ -1,6 +1,7 @@
 version = 0.1
 [default.deploy.parameters]
 stack_name = "ls-sandy-chatgpt"
+s3_bucket_for_artifacts = "sandy-samcli-bucket"
 s3_prefix = "chatgpt"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
