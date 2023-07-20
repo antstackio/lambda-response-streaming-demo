@@ -10,7 +10,7 @@ on:
 
   push:
     branches:
-      - feat/chatgpt
+      - main
 
 jobs:
   Build_Deploy:
