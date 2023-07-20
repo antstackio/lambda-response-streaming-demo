@@ -11,7 +11,7 @@ const apiCallStreamingResponse = (
   const apiStartTime = Date.now();
 
   let lambdaUrl = import.meta.env.VITE_LAMBDA_URL;
-  lambdaUrl = lambdaUrl.replace('""', "");
+  lambdaUrl = lambdaUrl.replace(/['"]+/g, "");
 
   fetch(lambdaUrl, {
     method: "GET",
@@ -172,7 +172,7 @@ const chatGPTapiCallStreamingResponse = (setData, value, setDataLoader) => {
   let tempChunk = "";
 
   let lambdaUrl = import.meta.env.VITE_CHAT_GPT_LAMBDA_URL;
-  lambdaUrl = lambdaUrl.replace('""', "");
+  lambdaUrl = lambdaUrl.replace(/['"]+/g, "");
 
   fetch(lambdaUrl, {
     method: "POST",
