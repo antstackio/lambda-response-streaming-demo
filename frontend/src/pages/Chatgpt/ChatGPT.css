@@ -1,0 +1,57 @@
+p,
+pre {
+  margin: 0;
+}
+
+pre {
+  background-color: #141414;
+  color: white;
+  padding: 12px 12px;
+  border-radius: 4px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  border: 1px solid #141414;
+  padding: 8px;
+}
+
+ul {
+  margin: 0;
+}
+
+#root > .ant-row > .ant-col {
+  gap: 12px;
+}
+
+.ant-col-chatgpt {
+  background: #f8f8f8a7;
+  border-radius: 6px !important;
+  /* max-height: 5%; */
+  height: 75vh;
+  overflow: scroll !important;
+  scroll-behavior: smooth;
+  display: flex !important;
+  /* justify-content: center !important; */
+  /* align-items: center; */
+}
+
+.input-box {
+  display: flex;
+  margin: auto;
+  align-items: center;
+  padding: 0 20vw;
+  height: 50px;
+}
+
+.row-style {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}

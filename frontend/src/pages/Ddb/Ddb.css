@@ -1,0 +1,112 @@
+.columnStyle {
+  padding: 16px;
+}
+.columnStyle * {
+  line-height: 1.4;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.logo img {
+  height: 66px;
+}
+/* .columnLeft {
+  border-right: 1px solid black;
+}
+
+.columnRight {
+  border-left: 1px solid black;
+} */
+#root > .ant-row {
+  padding: 16px;
+  /* min-height: calc(100vh - 66px); */
+  flex-wrap: nowrap;
+}
+#root > .ant-row > .ant-col {
+  gap: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+#root > .ant-row > .ant-col.columnLeft {
+  /* border: solid 3px green; */
+  border-radius: 30px;
+  min-width: 50%;
+  width: 50%;
+  flex: unset;
+  overflow: hidden;
+}
+
+#root > .ant-row > .ant-col.columnRight {
+  min-width: 50%;
+  width: 50%;
+  flex: unset;
+}
+.ant-image {
+  width: 100%;
+}
+#root > .ant-row > .ant-col h4 {
+  padding: 0 16px;
+  margin: 0;
+  margin: -16px -16px 0;
+}
+
+#root > .ant-row h4 + div {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: solid 1px #ddd;
+}
+
+#root > .ant-row > .ant-col .ant-table-wrapper {
+  flex: 1;
+}
+#root > .ant-row > .ant-col .ant-image {
+  height: auto;
+}
+#root > .ant-row > .ant-col .ant-image .ant-image-img {
+  object-fit: contain;
+}
+
+#root > .ant-row > .ant-col .ant-table {
+  /* margin: 16px -16px 0; */
+  border: solid 1px #ddd;
+  border-radius: 8px;
+}
+.ant-space {
+  gap: 16px;
+  align-items: stretch;
+  width: 100%;
+}
+.ant-space .ant-space-item {
+  border: solid 1px #ddd;
+  padding: 8px;
+  border-radius: 8px;
+  flex: 1 0 0;
+  display: flex;
+}
+.ant-space .ant-space-item .ant-statistic {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.ant-space .ant-space-item .ant-statistic .ant-statistic-title {
+  color: #1c1c1c;
+}
+#root > .ant-row > .ant-col.columnLeft .ant-space .ant-space-item:nth-child(1),
+#root > .ant-row > .ant-col.columnLeft .ant-space .ant-space-item:nth-child(2) {
+  background: #e9ffe9;
+  border: solid 1px green;
+}
+#root > .ant-row > .ant-col.columnRight .ant-space .ant-space-item:nth-child(1),
+#root
+  > .ant-row
+  > .ant-col.columnRight
+  .ant-space
+  .ant-space-item:nth-child(2) {
+  background: #fff3f1;
+  border: solid 1px orange;
+}

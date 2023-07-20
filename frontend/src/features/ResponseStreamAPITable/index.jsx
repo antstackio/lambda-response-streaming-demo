@@ -28,6 +28,7 @@ const ResponseStreamTable = () => {
       setDdbItems,
       setDdbItemsSize
     );
+
   }, []);
 
   const { Title } = Typography;

@@ -1,9 +1,9 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "ls-test-sandy"
+stack_name = "ls-sandy-chatgpt"
 s3_bucket_for_artifacts = "sandy-samcli-bucket"
-s3_prefix = "ls-test-sandy"
+s3_prefix = "chatgpt"
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-parameter_overrides = "S3BucketName=\"ls-test-sandy\" DynamoDBScanName=\"sandy-scandb-table\" DynamoDBQueryName=\"sandy-querydb-table\""
+parameter_overrides = "S3BucketName=\"sandy-ls-test-chatgpt\" DynamoDBScanName=\"sandy-scan-chatgpt\" DynamoDBQueryName=\"sandy-query-chatgpt\""
