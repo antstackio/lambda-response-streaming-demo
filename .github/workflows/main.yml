@@ -113,7 +113,7 @@ jobs:
 
       # Clearing S3 bucket where frontend old build is stored
       - name: Clearing older version
-        run: aws s3 rm s3://${{steps.s3_bucket_name.outputs.bucket_name}} --recursive
+        run: aws s3 rm s3://${{steps.Stack_Name.outputs.value}}-${{steps.s3_bucket_name.outputs.bucket_name}} --recursive
         working-directory: ./frontend
 
       # Build Frontend
@@ -126,7 +126,7 @@ jobs:
 
       # Upload the build to S3
       - name: Uploading newer verision
-        run: aws s3 sync . s3://${{steps.s3_bucket_name.outputs.bucket_name}}
+        run: aws s3 sync . s3://${{steps.Stack_Name.outputs.value}}-${{steps.s3_bucket_name.outputs.bucket_name}}
         working-directory: ./frontend/dist
 
       # Install requirements.txt file
