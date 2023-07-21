@@ -1,0 +1,15 @@
+Type: AWS::DynamoDB::Table
+Properties:
+  TableName:
+    Fn::Sub: ${AWS::StackName}-${DynamoDBQueryName}
+  AttributeDefinitions:
+    - AttributeName: id
+      AttributeType: S
+    - AttributeName: category
+      AttributeType: S
+  KeySchema:
+    - AttributeName: category
+      KeyType: HASH
+    - AttributeName: id
+      KeyType: RANGE
+  BillingMode: PAY_PER_REQUEST

@@ -1,0 +1,11 @@
+Type: AWS::Serverless::LayerVersion
+Metadata:
+  BuildMethod: nodejs18.x
+Properties:
+  CompatibleArchitectures:
+    - x86_64
+  CompatibleRuntimes:
+    - nodejs18.x
+  ContentUri: src/utils/
+  Description: Lambda layer for openai package
+  LayerName: Lambda-Layer-Streaming

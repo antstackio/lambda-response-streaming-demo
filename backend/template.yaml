@@ -1,6 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
-Transform: AWS::Serverless-2016-10-31
-
+AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   S3BucketName:
     Type: String
@@ -11,36 +9,39 @@ Parameters:
   DynamoDBQueryName:
     Type: String
     Default: query-db
-
+Transform: AWS::Serverless-2016-10-31
 Resources:
-  # Website Hosting Services - Start
   S3Bucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${AWS::StackName}-${S3BucketName}"
+      BucketName:
+        Fn::Sub: ${AWS::StackName}-${S3BucketName}
       WebsiteConfiguration:
-        IndexDocument: "index.html"
-
+        IndexDocument: index.html
   ReadPolicy:
-    Type: "AWS::S3::BucketPolicy"
+    Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref S3Bucket
+      Bucket:
+        Ref: S3Bucket
       PolicyDocument:
         Statement:
-          - Action: "s3:GetObject"
+          - Action: s3:GetObject
             Effect: Allow
-            Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+            Resource:
+              Fn::Sub: arn:aws:s3:::${S3Bucket}/*
             Principal:
-              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
-
+              CanonicalUser:
+                Fn::GetAtt:
+                  - CloudFrontOriginAccessIdentity
+                  - S3CanonicalUserId
   CloudFrontOriginAccessIdentity:
-    Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Ref S3Bucket
-
+        Comment:
+          Ref: S3Bucket
   CloudFrontDistribution:
-    Type: "AWS::CloudFront::Distribution"
+    Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         CustomErrorResponses:
@@ -58,34 +59,33 @@ Resources:
             - HEAD
             - OPTIONS
           Compress: true
-          DefaultTTL: 3600 # in seconds
+          DefaultTTL: 3600
           ForwardedValues:
             Cookies:
               Forward: none
             QueryString: false
-          MaxTTL: 86400 # in seconds
-          MinTTL: 60 # in seconds
+          MaxTTL: 86400
+          MinTTL: 60
           TargetOriginId: s3origin
-          ViewerProtocolPolicy: "allow-all"
-        # This DefaultRootObject configuration is not enough.
-        DefaultRootObject: "index.html"
+          ViewerProtocolPolicy: allow-all
+        DefaultRootObject: index.html
         Enabled: true
         HttpVersion: http2
         Origins:
-          - DomainName: !GetAtt "S3Bucket.DomainName"
+          - DomainName:
+              Fn::GetAtt:
+                - S3Bucket
+                - DomainName
             Id: s3origin
             S3OriginConfig:
-              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
-        PriceClass: "PriceClass_All"
-  # Website Hosting Services - End
-
-  # API
+              OriginAccessIdentity:
+                Fn::Sub: >-
+                  origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
+        PriceClass: PriceClass_All
   ResponseStreamingFunctionApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
-
-  # Lambdas - DDB Use Case
   DDBRegularLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -96,7 +96,8 @@ Resources:
       MemorySize: 1024
       Environment:
         Variables:
-          SCAN_DB_NAME: !Sub "${AWS::StackName}-${DynamoDBScanName}"
+          SCAN_DB_NAME:
+            Fn::Sub: ${AWS::StackName}-${DynamoDBScanName}
       Events:
         ApiEvent:
           Type: Api
@@ -131,7 +132,8 @@ Resources:
       AutoPublishAlias: live
       Environment:
         Variables:
-          SCAN_DB_NAME: !Sub "${AWS::StackName}-${DynamoDBScanName}"
+          SCAN_DB_NAME:
+            Fn::Sub: ${AWS::StackName}-${DynamoDBScanName}
       Events:
         ApiEvent:
           Type: Api
@@ -155,52 +157,51 @@ Resources:
           Permissions:
             - Write
             - Read
-
   DDBStreamingLambdaUrl:
     Type: AWS::Lambda::Url
     Properties:
       AuthType: NONE
       InvokeMode: RESPONSE_STREAM
-      TargetFunctionArn: !Ref DDBStreamingLambda
-
+      TargetFunctionArn:
+        Ref: DDBStreamingLambda
   DDBStreamingLambdaPublicAccess:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref DDBStreamingLambda
-      Principal: "*"
-
-  # DDB Tables
+      FunctionName:
+        Ref: DDBStreamingLambda
+      Principal: '*'
   ScanTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub "${AWS::StackName}-${DynamoDBScanName}"
+      TableName:
+        Fn::Sub: ${AWS::StackName}-${DynamoDBScanName}
       AttributeDefinitions:
-        - AttributeName: "id"
-          AttributeType: "S"
+        - AttributeName: id
+          AttributeType: S
       KeySchema:
-        - AttributeName: "id"
-          KeyType: "HASH"
+        - AttributeName: id
+          KeyType: HASH
       BillingMode: PAY_PER_REQUEST
-
   QueryTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub "${AWS::StackName}-${DynamoDBQueryName}"
+      TableName:
+        Fn::Sub: ${AWS::StackName}-${DynamoDBQueryName}
       AttributeDefinitions:
-        - AttributeName: "id"
-          AttributeType: "S"
-        - AttributeName: "category"
-          AttributeType: "S"
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
       KeySchema:
-        - AttributeName: "category"
-          KeyType: "HASH"
-        - AttributeName: "id"
-          KeyType: "RANGE"
+        - AttributeName: category
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
-
-  # Lambdas - ChatGPT Use Case
   StreamingLambdaLayer:
+    Metadata:
+      BuildMethod: nodejs18.x
     Type: AWS::Serverless::LayerVersion
     Properties:
       CompatibleArchitectures:
@@ -210,8 +211,6 @@ Resources:
       ContentUri: src/utils/
       Description: Lambda layer for openai package
       LayerName: Lambda-Layer-Streaming
-    Metadata:
-      BuildMethod: nodejs18.x
   ChatGPTStreamingFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -222,25 +221,25 @@ Resources:
       MemorySize: 1024
       AutoPublishAlias: live
       Layers:
-        - !Ref StreamingLambdaLayer
+        - Ref: StreamingLambdaLayer
       Environment:
         Variables:
-          API_KEY: >-
-            {{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}
-
+          API_KEY: '{{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}'
+          ORG_ID: '{{resolve:secretsmanager:CHAT_GPT:SecretString:ORG_ID}}'
   ChatGPTStreamingFunctionUrl:
     Type: AWS::Lambda::Url
     Properties:
       AuthType: NONE
       InvokeMode: RESPONSE_STREAM
-      TargetFunctionArn: !Ref ChatGPTStreamingFunction
-
+      TargetFunctionArn:
+        Ref: ChatGPTStreamingFunction
   ChatGPTStreamingFunctionPublicAccess:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref ChatGPTStreamingFunction
-      Principal: "*"
+      FunctionName:
+        Ref: ChatGPTStreamingFunction
+      Principal: '*'
   ChatGPTRegularLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -258,18 +257,29 @@ Resources:
             RestApiId:
               Ref: ResponseStreamingFunctionApi
       Layers:
-        - !Ref StreamingLambdaLayer
+        - Ref: StreamingLambdaLayer
       Environment:
         Variables:
-          API_KEY: >-
-            {{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}
-
+          API_KEY: '{{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}'
+          ORG_ID: '{{resolve:secretsmanager:CHAT_GPT:SecretString:ORG_ID}}'
 Outputs:
   ResponseLambdaUrlDDB:
-    Value: !GetAtt DDBStreamingLambdaUrl.FunctionUrl
+    Value:
+      Fn::GetAtt:
+        - DDBStreamingLambdaUrl
+        - FunctionUrl
   ResponseLambdaUrlChatGPT:
-    Value: !GetAtt ChatGPTStreamingFunctionUrl.FunctionUrl
+    Value:
+      Fn::GetAtt:
+        - ChatGPTStreamingFunctionUrl
+        - FunctionUrl
   ApiResourceId:
-    Value: !GetAtt ResponseStreamingFunctionApi.RestApiId
+    Value:
+      Fn::GetAtt:
+        - ResponseStreamingFunctionApi
+        - RestApiId
   CloudFrontDomainName:
-    Value: !GetAtt CloudFrontDistribution.DomainName
+    Value:
+      Fn::GetAtt:
+        - CloudFrontDistribution
+        - DomainName
