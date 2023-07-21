@@ -1,0 +1,20 @@
+ResponseLambdaUrlDDB:
+  Value:
+    Fn::GetAtt:
+      - DDBStreamingLambdaUrl
+      - FunctionUrl
+ResponseLambdaUrlChatGPT:
+  Value:
+    Fn::GetAtt:
+      - ChatGPTStreamingFunctionUrl
+      - FunctionUrl
+ApiResourceId:
+  Value:
+    Fn::GetAtt:
+      - ResponseStreamingFunctionApi
+      - RestApiId
+CloudFrontDomainName:
+  Value:
+    Fn::GetAtt:
+      - CloudFrontDistribution
+      - DomainName

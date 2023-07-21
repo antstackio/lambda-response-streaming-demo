@@ -1,0 +1,20 @@
+Type: AWS::Serverless::Function
+Properties:
+  CodeUri: src/ChatGPTRegularLambda
+  Handler: index.handler
+  Runtime: nodejs16.x
+  Timeout: 30
+  MemorySize: 1024
+  Events:
+    ApiEvent:
+      Type: Api
+      Properties:
+        Path: /chatgpt_regular
+        Method: post
+        RestApiId:
+          Ref: ResponseStreamingFunctionApi
+  Layers:
+    - Ref: StreamingLambdaLayer
+  Environment:
+    Variables:
+      API_KEY: '{{resolve:secretsmanager:CHAT_GPT:SecretString:API_KEY}}'
