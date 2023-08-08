@@ -5,8 +5,6 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({
 const scan_table = "benchmark-normalised-bikes"
 const query_table = "benchmark-sta-bikes"
 
-// var credentials = new AWS.SharedIniFileCredentials({profile: '960351580303_AdministratorAccess'});
-// AWS.config.credentials = credentials;
 
 var start = process.hrtime()
 

@@ -13,7 +13,7 @@ query_db_table = "benchmark-sta-bikes"
 reader = csv.DictReader(open('sourceData.csv', newline=""), dialect="excel")
 myArr = [dict(row) for row in reader]
 
-my_session = boto3.session.Session(region_name=region, profile_name='960351580303_AdministratorAccess')
+my_session = boto3.session.Session(region_name=region, profile_name='profile_name')
 dynamodb = my_session.resource('dynamodb')
 scan_table = dynamodb.Table(scan_db_table)
 query_table = dynamodb.Table(query_db_table)
