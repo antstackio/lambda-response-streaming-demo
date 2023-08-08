@@ -4,6 +4,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import "./Table.css";
 
 const GenericTable = (props) => {
+  console.log("PROPS", props.tableData)
   return (
     <Table
       columns={tableColumns(props.headerSource)}

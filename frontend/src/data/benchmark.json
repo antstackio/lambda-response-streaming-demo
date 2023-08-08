@@ -1,0 +1,29 @@
+{
+    "Benchmarks": [
+        {
+            "Operation": "Trial 1",
+            "Normalised Scan": 14.314255,
+            "Single Table Query": 14.546622
+        },
+        {
+            "Operation": "Trial 2",
+            "Normalised Scan": 13.709952,
+            "Single Table Query": 13.743393
+        },
+        {
+            "Operation": "Trial 3",
+            "Normalised Scan": 14.010728,
+            "Single Table Query": 13.952129
+        },
+        {
+            "Operation": "Trial 4",
+            "Normalised Scan": 15.068516,
+            "Single Table Query": 17.815236
+        },
+        {
+            "Operation": "Trial 5",
+            "Normalised Scan": 15.83412,
+            "Single Table Query": 16.000479
+        }
+    ]
+}
