@@ -35,6 +35,7 @@ const BenchmarkChart = () => {
   const datasets = keys.map((item) => { return { label: item, data: benchmarksData.Benchmarks.map((i) => { console.log(item, i[item]); return i[item] }), borderColor: colours[keys.indexOf(item)] } })
   return (
     <div className="line-chart">
+      <h2 style={{ textAlign: "center" }}>Normalised scan vs Single Table Query</h2>
       <Line data={{ labels: labels, datasets: datasets }} />
     </div>);
 };
