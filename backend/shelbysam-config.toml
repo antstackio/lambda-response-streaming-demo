@@ -1,0 +1,4 @@
+region = "ap-south-1"
+sam_template_file = "template.yaml"
+shelbysam_template_file = "shelbysam.yaml"
+shelbysam_template_folder = "infra_resources"
