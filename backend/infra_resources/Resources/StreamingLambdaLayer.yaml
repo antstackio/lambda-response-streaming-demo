@@ -1,6 +1,6 @@
-Type: AWS::Serverless::LayerVersion
 Metadata:
   BuildMethod: nodejs18.x
+Type: AWS::Serverless::LayerVersion
 Properties:
   CompatibleArchitectures:
     - x86_64

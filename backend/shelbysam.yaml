@@ -1,21 +1,21 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Parameters: ${file:infra/Parameters.yml}
+Parameters: ${file:infra_resources/Parameters.yaml}
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  S3Bucket: ${file:infra/Resources/S3Bucket.yml}
-  ReadPolicy: ${file:infra/Resources/ReadPolicy.yml}
-  CloudFrontOriginAccessIdentity: ${file:infra/Resources/CloudFrontOriginAccessIdentity.yml}
-  CloudFrontDistribution: ${file:infra/Resources/CloudFrontDistribution.yml}
-  ResponseStreamingFunctionApi: ${file:infra/Resources/ResponseStreamingFunctionApi.yml}
-  DDBRegularLambda: ${file:infra/Resources/DDBRegularLambda.yml}
-  DDBStreamingLambda: ${file:infra/Resources/DDBStreamingLambda.yml}
-  DDBStreamingLambdaUrl: ${file:infra/Resources/DDBStreamingLambdaUrl.yml}
-  DDBStreamingLambdaPublicAccess: ${file:infra/Resources/DDBStreamingLambdaPublicAccess.yml}
-  ScanTable: ${file:infra/Resources/ScanTable.yml}
-  QueryTable: ${file:infra/Resources/QueryTable.yml}
-  StreamingLambdaLayer: ${file:infra/Resources/StreamingLambdaLayer.yml}
-  ChatGPTStreamingFunction: ${file:infra/Resources/ChatGPTStreamingFunction.yml}
-  ChatGPTStreamingFunctionUrl: ${file:infra/Resources/ChatGPTStreamingFunctionUrl.yml}
-  ChatGPTStreamingFunctionPublicAccess: ${file:infra/Resources/ChatGPTStreamingFunctionPublicAccess.yml}
-  ChatGPTRegularLambda: ${file:infra/Resources/ChatGPTRegularLambda.yml}
-Outputs: ${file:infra/Outputs.yml}
+  S3Bucket: ${file:infra_resources/Resources/S3Bucket.yaml}
+  ReadPolicy: ${file:infra_resources/Resources/ReadPolicy.yaml}
+  CloudFrontOriginAccessIdentity: ${file:infra_resources/Resources/CloudFrontOriginAccessIdentity.yaml}
+  CloudFrontDistribution: ${file:infra_resources/Resources/CloudFrontDistribution.yaml}
+  ResponseStreamingFunctionApi: ${file:infra_resources/Resources/ResponseStreamingFunctionApi.yaml}
+  DDBRegularLambda: ${file:infra_resources/Resources/DDBRegularLambda.yaml}
+  DDBStreamingLambda: ${file:infra_resources/Resources/DDBStreamingLambda.yaml}
+  DDBStreamingLambdaUrl: ${file:infra_resources/Resources/DDBStreamingLambdaUrl.yaml}
+  DDBStreamingLambdaPublicAccess: ${file:infra_resources/Resources/DDBStreamingLambdaPublicAccess.yaml}
+  ScanTable: ${file:infra_resources/Resources/ScanTable.yaml}
+  QueryTable: ${file:infra_resources/Resources/QueryTable.yaml}
+  StreamingLambdaLayer: ${file:infra_resources/Resources/StreamingLambdaLayer.yaml}
+  ChatGPTStreamingFunction: ${file:infra_resources/Resources/ChatGPTStreamingFunction.yaml}
+  ChatGPTStreamingFunctionUrl: ${file:infra_resources/Resources/ChatGPTStreamingFunctionUrl.yaml}
+  ChatGPTStreamingFunctionPublicAccess: ${file:infra_resources/Resources/ChatGPTStreamingFunctionPublicAccess.yaml}
+  ChatGPTRegularLambda: ${file:infra_resources/Resources/ChatGPTRegularLambda.yaml}
+Outputs: ${file:infra_resources/Outputs.yaml}
