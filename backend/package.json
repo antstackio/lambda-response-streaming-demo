@@ -1,0 +1,14 @@
+{
+  "name": "lambda-response-streaming-backend",
+  "version": "1.0.0",
+  "description": "This pattern shows how to use Lambda response streaming to improve time-to-first byte using the write() method. For more information on the feature, see the [launch blog post](https://aws.amazon.com/blogs/compute/introducing-aws-lambda-response-streaming/).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@antstackio/shelbysam": "^1.1.3"
+  }
+}
