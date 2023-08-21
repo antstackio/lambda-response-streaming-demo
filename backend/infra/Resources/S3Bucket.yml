@@ -1,6 +1,0 @@
-Type: AWS::S3::Bucket
-Properties:
-  BucketName:
-    Fn::Sub: ${AWS::StackName}-${S3BucketName}
-  WebsiteConfiguration:
-    IndexDocument: index.html

@@ -1,0 +1,5 @@
+Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+Properties:
+  CloudFrontOriginAccessIdentityConfig:
+    Comment:
+      Ref: S3Bucket

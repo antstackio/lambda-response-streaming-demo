@@ -1,6 +1,0 @@
-Type: AWS::Lambda::Url
-Properties:
-  AuthType: NONE
-  InvokeMode: RESPONSE_STREAM
-  TargetFunctionArn:
-    Ref: ChatGPTStreamingFunction

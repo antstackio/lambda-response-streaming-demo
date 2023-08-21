@@ -1,9 +1,0 @@
-S3BucketName:
-  Type: String
-  Default: hosted-bucket
-DynamoDBScanName:
-  Type: String
-  Default: scan-db
-DynamoDBQueryName:
-  Type: String
-  Default: query-db

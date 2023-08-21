@@ -1,0 +1,3 @@
+Type: AWS::Serverless::Api
+Properties:
+  StageName: prod
