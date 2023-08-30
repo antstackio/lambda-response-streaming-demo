@@ -167,7 +167,7 @@ Resources:
   DDBStreamingLambdaPublicAccess:
     Type: AWS::Lambda::Permission
     Properties:
-      Action: lambda:InvokeFunction
+      Action: lambda:InvokeFunctionUrl
       FunctionName:
         Ref: DDBStreamingLambda
       Principal: '*'
@@ -217,8 +217,8 @@ Resources:
       CodeUri: src/ChatGPTStreamingLambda
       Handler: index.handler
       Runtime: nodejs16.x
-      Timeout: 30
-      MemorySize: 1024
+      Timeout: 60
+      MemorySize: 1536
       AutoPublishAlias: live
       Layers:
         - Ref: StreamingLambdaLayer
@@ -236,7 +236,7 @@ Resources:
   ChatGPTStreamingFunctionPublicAccess:
     Type: AWS::Lambda::Permission
     Properties:
-      Action: lambda:InvokeFunction
+      Action: lambda:InvokeFunctionUrl
       FunctionName:
         Ref: ChatGPTStreamingFunction
       Principal: '*'
@@ -246,8 +246,8 @@ Resources:
       CodeUri: src/ChatGPTRegularLambda
       Handler: index.handler
       Runtime: nodejs16.x
-      Timeout: 30
-      MemorySize: 1024
+      Timeout: 60
+      MemorySize: 1536
       Events:
         ApiEvent:
           Type: Api

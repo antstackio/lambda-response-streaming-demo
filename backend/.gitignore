@@ -20,3 +20,6 @@ aws-sam-cli.yaml
 
 # Ignore local environment variables
 .env
+
+#Shelbysam 
+.shelbysam
