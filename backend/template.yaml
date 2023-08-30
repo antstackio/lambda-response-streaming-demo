@@ -167,9 +167,10 @@ Resources:
   DDBStreamingLambdaPublicAccess:
     Type: AWS::Lambda::Permission
     Properties:
-      Action: lambda:InvokeFunctionUrl
       FunctionName:
         Ref: DDBStreamingLambda
+      FunctionUrlAuthType: NONE
+      Action: lambda:InvokeFunctionUrl
       Principal: '*'
   ScanTable:
     Type: AWS::DynamoDB::Table
@@ -236,9 +237,10 @@ Resources:
   ChatGPTStreamingFunctionPublicAccess:
     Type: AWS::Lambda::Permission
     Properties:
-      Action: lambda:InvokeFunctionUrl
       FunctionName:
         Ref: ChatGPTStreamingFunction
+      FunctionUrlAuthType: NONE
+      Action: lambda:InvokeFunctionUrl
       Principal: '*'
   ChatGPTRegularLambda:
     Type: AWS::Serverless::Function
