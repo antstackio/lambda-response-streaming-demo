@@ -1,6 +1,7 @@
 Type: AWS::Lambda::Permission
 Properties:
-  Action: lambda:InvokeFunctionUrl
   FunctionName:
     Ref: ChatGPTStreamingFunction
+  FunctionUrlAuthType: "NONE"
+  Action: lambda:InvokeFunctionUrl
   Principal: "*"
