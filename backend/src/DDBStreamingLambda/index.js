@@ -38,11 +38,6 @@ exports.handler = awslambda.streamifyResponse(
 
       // Send the scan result to the stream
       responseStream.write(data.Items);
-
-      // Send an identifier to differentiate between the streams
-      // Since the transaction are happening
-      responseStream.write("${Separator}");
-
       counter += 1;
 
       // If there are more items to scan, recursively call the scanDynamoDBTable function with the last evaluated key
